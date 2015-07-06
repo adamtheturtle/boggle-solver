@@ -1,6 +1,8 @@
 language: python
 python:
   - "2.7"
-# There are currently no requirements
+install:
+  - "pip install flake8 --use-mirrors"
+before_script: "flake8 *.py"
 # command to run tests
 script: python -m unittest boggle
