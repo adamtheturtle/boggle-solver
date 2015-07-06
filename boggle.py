@@ -13,7 +13,7 @@ def get_positions(letter, board):
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
             if piece == letter:
-                positions.append((row_index, column_index))
+                positions.append((column_index, row_index))
     return positions
 
 def positions_touching(first, second):
@@ -81,7 +81,9 @@ class GetRoutesTests(unittest.TestCase):
             ],
             get_routes(
                 word='foo',
-                board=['f', 'o', 'o'],
+                board=[
+                    ['f', 'o', 'o']
+                ],
             )
         )
 
@@ -90,7 +92,9 @@ class GetRoutesTests(unittest.TestCase):
             [],
             get_routes(
                 word='not',
-                board=['w', 'o', 'r', 'd']
+                board=[
+                    ['w', 'o', 'r', 'd']
+                ]
             )
         )
 
@@ -99,7 +103,9 @@ class GetRoutesTests(unittest.TestCase):
             [],
             get_routes(
                 word='wow',
-                board=['w', 'o', 'r', 'd']
+                board=[
+                    ['w', 'o', 'r', 'd']
+                ],
             )
         )
 
@@ -167,7 +173,7 @@ class GetPositionsTests(unittest.TestCase):
 
     def test_get_positions(self):
         self.assertEqual(
-            [(0, 0), (0, 2), (1, 0), (3, 3)],
+            [(0, 0), (2, 0), (0, 1), (3, 3)],
             get_positions(
                 letter='a',
                 board=[
