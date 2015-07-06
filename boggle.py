@@ -18,7 +18,8 @@ def get_positions(letter, board):
     positions = []
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
-            if piece == letter:
+            # TODO direct test for this
+            if piece[0] == letter[0]:
                 positions.append((column_index, row_index))
     return positions
 
@@ -86,10 +87,10 @@ def list_words(board, dictionary):
     """
     word_list = set()
     for word in dictionary:
-        if len(word) > 2:
-            routes = get_routes(word, board)
-            if len(routes):
-                word_list.add(word)
+        word = word.upper()
+        routes = get_routes(word.replace('QU', 'Q'), board)
+        if len(routes) and len(word) > 2:
+            word_list.add(word)
     return word_list
 
 class GetRoutesTests(unittest.TestCase):
@@ -189,6 +190,20 @@ class ListWordsTests(unittest.TestCase):
             )
         )
 
+    def test_q_u_together(self):
+        """
+        Q and U are on the same tile.
+        """
+        self.assertEqual(
+            set(['QUA']),
+            list_words(
+                dictionary=set(['QUA']),
+                board=[
+                    ['QU', 'A'],
+                ],
+            )
+        )
+
 class GetPositionsTests(unittest.TestCase):
     """
     Tests for get_positions.
@@ -239,7 +254,7 @@ class PositionsTouchingTests(unittest.TestCase):
 
 if __name__ == "__main__":
     with open("english_words.txt") as word_file:
-        english_words = set(word.strip().lower() for word in word_file)
+        english_words = set(word.strip() for word in word_file)
     found_words = list_words(
         dictionary=english_words,
         board=[
