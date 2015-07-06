@@ -1,7 +1,7 @@
-# python -m unittest boggle
-
 import copy
 import unittest
+
+# TODO add flake8 to travis
 
 def get_positions(letter, board):
     """
