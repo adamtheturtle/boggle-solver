@@ -3,8 +3,6 @@
 import copy
 import unittest
 
-# TODO travis
-
 def get_positions(letter, board):
     """
     Return a list of positions a letter can be found on a board.
