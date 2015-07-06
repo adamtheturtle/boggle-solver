@@ -73,49 +73,65 @@ def list_words(board, dictionary):
     return word_list
 
 class GetRoutesTests(unittest.TestCase):
+    """
+    Tests for `get_routes`.
+    """
 
     def test_route(self):
+        """
+        A list of lists positions between the first and last letter is
+        returned.
+        """
         self.assertEqual(
             [
                 [(0, 0), (1, 0), (2, 0)],
             ],
             get_routes(
-                word='foo',
+                word='ABC',
                 board=[
-                    ['f', 'o', 'o']
+                    ['A', 'B', 'C'],
                 ],
             )
         )
 
     def test_not_in_board(self):
+        """
+        If a word is not available in the board, an empty list is returned.
+        """
         self.assertEqual(
             [],
             get_routes(
-                word='not',
+                word='ABC',
                 board=[
-                    ['w', 'o', 'r', 'd']
+                    ['D', 'E', 'F'],
                 ]
             )
         )
 
-    def test_cannot_reuse_letter(self):
+    def test_cannot_reuse_tile(self):
+        """
+        The same tile cannot be reused.
+        """
         self.assertEqual(
             [],
             get_routes(
-                word='wow',
+                word='ABA',
                 board=[
-                    ['w', 'o', 'r', 'd']
+                    ['A', 'B'],
                 ],
             )
         )
 
     def test_all_letters_necessary(self):
+        """
+        A route does not exist if not all letters are available.
+        """
         self.assertEqual(
             [],
             get_routes(
-                word='ptop',
+                word='ABCD',
                 board=[
-                    ['p', 'o', 'p'],
+                    ['A', 'C', 'D'],
                 ],
             )
         )
