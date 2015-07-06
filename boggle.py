@@ -1,5 +1,7 @@
+from __future__ import print_function
 import copy
 import unittest
+import io
 
 # TODO Add pyflakes to travis
 # TODO add python 3+ support to travis
@@ -319,8 +321,9 @@ class PositionsTouchingTests(unittest.TestCase):
         self.assertFalse(positions_touching(first=(0, 0), second=(0, 2)))
 
 if __name__ == "__main__":
-    with open("english_words.txt") as word_file:
+    with io.open("english_words.txt", encoding='latin-1') as word_file:
         english_words = set(word.strip() for word in word_file)
+
     found_words = list_words(
         dictionary=english_words,
         board=[
@@ -331,6 +334,6 @@ if __name__ == "__main__":
             ['R', 'E', 'L', 'L', 'S'],
         ],
     )
-    print len(found_words)
+    print(len(found_words))
     from pprint import pprint
     pprint(sorted(list(found_words)))
