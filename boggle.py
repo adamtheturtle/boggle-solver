@@ -6,7 +6,7 @@ import unittest
 # TODO does this handle Qu?
 # TODO always lowercase
 # TODO docstrings
-# TODO columns vs rows?
+# TODO travis
 
 def get_positions(letter, board):
     positions = []
