@@ -1,7 +1,11 @@
 import copy
 import unittest
 
-# TODO add flake8 to travis
+# TODO Add pyflakes to travis
+# TODO possible optimisations -
+#   * Decrease the dictionary length to remove "'"s etc.
+#   * Decrease the dictionary length to remove two letter words.
+#   * Stop after one valid route
 
 
 def get_positions(letter, board):
