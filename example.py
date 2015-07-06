@@ -3,7 +3,7 @@ import io
 
 from boggle.boggle import list_words
 
-with io.open("english_words.txt", encoding='latin-1') as word_file:
+with io.open("/usr/share/dict/words", encoding='latin-1') as word_file:
     english_words = set(word.strip() for word in word_file)
 
 found_words = list_words(
