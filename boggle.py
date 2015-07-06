@@ -58,6 +58,7 @@ def get_routes(word, board):
     for route in routes_without_duplicates:
         if len(route) == len(word):
             whole_word_routes.append(route)
+
     return whole_word_routes
 
 def list_words(board, dictionary):
@@ -137,50 +138,34 @@ class GetRoutesTests(unittest.TestCase):
         )
 
 class ListWordsTests(unittest.TestCase):
-
+    """
+    Tests for `list_words`.
+    """
     def test_list_words(self):
-        self.assertIn(
-            'zoo',
+        """
+        A set of available words is returned.
+        """
+        self.assertEqual(
+            set(['ABC', 'DEF']),
             list_words(
-                dictionary=set(['zoo']),
+                dictionary=set(['ABC', 'DEF', 'GHI']),
                 board=[
-                    ['z', 'o', 'o', 'a', 'a'],
-                    ['a', 'a', 'a', 'a', 'a'],
-                ],
-            )
-        )
-
-    def test_word_not_in_dict(self):
-        self.assertNotIn(
-            'zoo',
-            list_words(
-                dictionary=set(['foo']),
-                board=[
-                    ['z', 'o', 'o', 'a', 'a'],
-                    ['a', 'a', 'a', 'a', 'a'],
-                ],
-            )
-        )
-
-    def test_word_not_found(self):
-        self.assertNotIn(
-            'zoo',
-            list_words(
-                dictionary=set(['zoo']),
-                board=[
-                    ['a', 'a', 'a', 'a', 'a'],
-                    ['a', 'a', 'a', 'a', 'a'],
+                    ['A', 'B', 'C'],
+                    ['D', 'E', 'F'],
                 ],
             )
         )
 
     def test_short_word_ignored(self):
-        self.assertNotIn(
-            'zo',
+        """
+        Only words of 3 or more letters are returned.
+        """
+        self.assertEqual(
+            set(),
             list_words(
-                dictionary=set(['zo']),
+                dictionary=set(['AB']),
                 board=[
-                    ['z', 'o'],
+                    ['A', 'B'],
                 ],
             )
         )
