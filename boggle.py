@@ -170,18 +170,21 @@ class ListWordsTests(unittest.TestCase):
         )
 
 class GetPositionsTests(unittest.TestCase):
+    """
+    Tests for get_positions.
+    """
 
     def test_get_positions(self):
+        """
+        A list of position tuples
+        """
         self.assertEqual(
-            [(0, 0), (2, 0), (0, 1), (3, 3)],
+            [(0, 0), (2, 0), (0, 1)],
             get_positions(
-                letter='a',
+                letter='A',
                 board=[
-                    ['a', 'd', 'a', 'm', 'd'],
-                    ['a', 'n', 'g', 'o', 'o'],
-                    ['r', 'g', 'i', 'd', 'e'],
-                    ['o', 'n', 'f', 'a', 'r'],
-                    ['r', 'e', 'l', 'l', 's'],
+                    ['A', 'X', 'A', 'X', 'X'],
+                    ['A', 'X', 'X', 'X', 'X'],
                 ],
             )
         )
