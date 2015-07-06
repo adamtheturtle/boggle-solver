@@ -294,16 +294,16 @@ class PositionsTouchingTests(unittest.TestCase):
         """
         self.assertTrue(
             all([
-                    # Second on right on first.
-                    positions_touching(first=(1, 0), second=(0, 0)),
-                    # Second on left of first.
-                    positions_touching(first=(1, 0), second=(0, 0)),
-                    # Second above first.
-                    positions_touching(first=(0, 1), second=(0, 0)),
-                    # Second below first.
-                    positions_touching(first=(0, 0), second=(0, 1)),
+                # Second on right on first.
+                positions_touching(first=(1, 0), second=(0, 0)),
+                # Second on left of first.
+                positions_touching(first=(1, 0), second=(0, 0)),
+                # Second above first.
+                positions_touching(first=(0, 1), second=(0, 0)),
+                # Second below first.
+                positions_touching(first=(0, 0), second=(0, 1)),
                 ],
-            ))
+                ))
 
     def test_not_touching(self):
         """
