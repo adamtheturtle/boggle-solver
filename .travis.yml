@@ -8,8 +8,10 @@ python:
   - "nightly"
 install:
   - "pip install flake8 coveralls"
-before_script: "flake8 boggle"
+before_script:
+  - "flake8 boggle"
 # command to run tests
-script: coverage run -m unittest discover
+script:
+  - "coverage run -m unittest discover"
 after_success:
-  - coveralls
+  - "coveralls"
