@@ -5,7 +5,6 @@ import unittest
 
 # TODO does this handle Qu?
 # TODO always lowercase
-# TODO docstrings
 # TODO travis
 
 def get_positions(letter, board):
@@ -17,20 +16,30 @@ def get_positions(letter, board):
     return positions
 
 def positions_touching(first, second):
+    """
+    Given two tile positions, check whether they are touching.
+
+    first: Tuple of co-ordinates of a tile.
+    second: Tuple of co-ordinates of a tile.
+
+    return: Bool, true iff the tiles are touching - immediately above, below
+        or diagonal.
+    """
     return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
 
-
-def get_touching_positions(first_positions, second_positions):
-    touching_positions = []
-
-    for first_position in first_positions:
-        for second_position in second_positions:
-            if positions_touching(first_position, second_position):
-                touching_positions.append([first_position, second_position])
-
-    return touching_positions
-
 def get_routes(word, board):
+    """
+    Get available routes to make a word in a board.
+
+    A route is a path of positions from first tile to next, to next... until
+    the last tile. It cannot include the same tile multiple times.
+
+    word: A string.
+    board: A list of lists of tiles. Each list in the list of lists represents
+        a row of a Boggle board.
+
+    returns: List of lists of tile positions.
+    """
     routes = []
 
     for letter in word:
@@ -49,21 +58,24 @@ def get_routes(word, board):
 
         routes = copy.copy(new_routes)
 
-    routes_without_duplicates = []
+    valid_routes = []
     for route in routes:
-        if len(set(route)) == len(route):
-            routes_without_duplicates.append(route)
+        no_duplicates = len(set(route)) == len(route)
+        includes_whole_word = len(route) == len(word)
+        if no_duplicates and includes_whole_word:
+            valid_routes.append(route)
 
-    whole_word_routes = []
-    for route in routes_without_duplicates:
-        if len(route) == len(word):
-            whole_word_routes.append(route)
-
-    return whole_word_routes
+    return valid_routes
 
 def list_words(board, dictionary):
     """
-    board: list of lists.
+    Return all words from a given dictionary which are in a board.
+
+    dictionary: A set of valid words.
+    board: A list of lists of tiles. Each list in the list of lists represents
+        a row of a Boggle board.
+
+    returns: A set of strings.
     """
     word_list = set()
     for word in dictionary:
