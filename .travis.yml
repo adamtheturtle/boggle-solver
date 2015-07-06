@@ -7,7 +7,9 @@ python:
   - "3.4"
   - "nightly"
 install:
-  - "pip install flake8"
+  - "pip install flake8 coveralls"
 before_script: "flake8 *.py"
 # command to run tests
-script: python -m unittest boggle
+script: coverage run -m unittest boggle
+after_success:
+  - coveralls
