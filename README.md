@@ -1,0 +1,2 @@
+# boggle-solver
+Solves boggle
