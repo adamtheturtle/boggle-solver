@@ -4,7 +4,6 @@ import unittest
 import io
 
 # TODO Add pyflakes to travis
-# TODO add python 3+ support to travis
 # TODO add code coverage to travis
 # TODO add a way to input a board (text file / photo)
 # TODO possible optimisations -
