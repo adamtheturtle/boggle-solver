@@ -3,10 +3,7 @@
 import copy
 import unittest
 
-# TODO does this handle Qu?
-# TODO always lowercase
 # TODO travis
-# TODO replace letter with tile
 
 def get_positions(letter, board):
     """
@@ -18,8 +15,7 @@ def get_positions(letter, board):
     positions = []
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
-            # TODO direct test for this
-            if piece[0] == letter[0]:
+            if piece[0].upper() == letter[0].upper():
                 positions.append((column_index, row_index))
     return positions
 
@@ -192,14 +188,42 @@ class ListWordsTests(unittest.TestCase):
 
     def test_q_u_together(self):
         """
-        Q and U are on the same tile.
+        Q and u are on the same tile.
         """
         self.assertEqual(
             set(['QUA']),
             list_words(
                 dictionary=set(['QUA']),
                 board=[
-                    ['QU', 'A'],
+                    ['Qu', 'A'],
+                ],
+            )
+        )
+
+    def test_case_insensitive_dictionary(self):
+        """
+        Listing words is case insensitive to dictionary case.
+        """
+        self.assertEqual(
+            set(['ABC']),
+            list_words(
+                dictionary=set(['AbC']),
+                board=[
+                    ['A', 'B', 'C'],
+                ],
+            )
+        )
+
+    def test_case_insensitive_board(self):
+        """
+        Listing words is case insensitive to board case.
+        """
+        self.assertEqual(
+            set(['ABC']),
+            list_words(
+                dictionary=set(['ABC']),
+                board=[
+                    ['A', 'B', 'c'],
                 ],
             )
         )
@@ -220,6 +244,35 @@ class GetPositionsTests(unittest.TestCase):
                 board=[
                     ['A', 'X', 'A', 'X', 'X'],
                     ['A', 'X', 'X', 'X', 'X'],
+                ],
+            )
+        )
+
+    def test_case_insensitive(self):
+        """
+        The case of the letter does not matter.
+        """
+        self.assertEqual(
+            [(0, 0), (0, 1)],
+            get_positions(
+                letter='a',
+                board=[
+                    ['a'],
+                    ['A'],
+                ],
+            )
+        )
+
+    def test_first_letter_only(self):
+        """
+        Only the first letter is compared. This is to handle the "Qu" tile.
+        """
+        self.assertEqual(
+            [(0, 0)],
+            get_positions(
+                letter='AB',
+                board=[
+                    ['AC'],
                 ],
             )
         )
