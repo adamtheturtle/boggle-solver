@@ -3,6 +3,7 @@ import unittest
 
 # TODO add flake8 to travis
 
+
 def get_positions(letter, board):
     """
     Return a list of positions a letter can be found on a board.
@@ -17,6 +18,7 @@ def get_positions(letter, board):
                 positions.append((column_index, row_index))
     return positions
 
+
 def positions_touching(first, second):
     """
     Given two tile positions, check whether they are touching.
@@ -28,6 +30,7 @@ def positions_touching(first, second):
         or diagonal.
     """
     return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
+
 
 def get_routes(word, board):
     """
@@ -69,6 +72,7 @@ def get_routes(word, board):
 
     return valid_routes
 
+
 def list_words(board, dictionary):
     """
     Return all words from a given dictionary which are in a board.
@@ -86,6 +90,7 @@ def list_words(board, dictionary):
         if len(routes) and len(word) > 2:
             word_list.add(word)
     return word_list
+
 
 class GetRoutesTests(unittest.TestCase):
     """
@@ -119,7 +124,7 @@ class GetRoutesTests(unittest.TestCase):
                 word='ABC',
                 board=[
                     ['D', 'E', 'F'],
-                ]
+                ],
             )
         )
 
@@ -150,6 +155,7 @@ class GetRoutesTests(unittest.TestCase):
                 ],
             )
         )
+
 
 class ListWordsTests(unittest.TestCase):
     """
@@ -226,6 +232,7 @@ class ListWordsTests(unittest.TestCase):
             )
         )
 
+
 class GetPositionsTests(unittest.TestCase):
     """
     Tests for get_positions.
@@ -275,6 +282,7 @@ class GetPositionsTests(unittest.TestCase):
             )
         )
 
+
 class PositionsTouchingTests(unittest.TestCase):
     """
     Tests for `positions_touching`.
@@ -294,7 +302,7 @@ class PositionsTouchingTests(unittest.TestCase):
                     positions_touching(first=(0, 1), second=(0, 0)),
                     # Second below first.
                     positions_touching(first=(0, 0), second=(0, 1)),
-                ]
+                ],
             ))
 
     def test_not_touching(self):
