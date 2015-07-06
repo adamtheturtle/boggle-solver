@@ -1,7 +1,4 @@
-from __future__ import print_function
-
 import copy
-import io
 
 # TODO Add pyflakes to travis
 # TODO add a way to input a board (text file / photo)
@@ -97,21 +94,3 @@ def list_words(board, dictionary):
         if len(routes) and len(word) > 2:
             word_list.add(word)
     return word_list
-
-if __name__ == "__main__":
-    with io.open("english_words.txt", encoding='latin-1') as word_file:
-        english_words = set(word.strip() for word in word_file)
-
-    found_words = list_words(
-        dictionary=english_words,
-        board=[
-            ['Qu', 'A', 'A', 'M', 'D'],
-            ['A', 'L', 'G', 'O', 'O'],
-            ['R', 'G', 'I', 'D', 'E'],
-            ['O', 'N', 'F', 'Y', 'R'],
-            ['R', 'E', 'L', 'L', 'S'],
-        ],
-    )
-    print(len(found_words))
-    from pprint import pprint
-    pprint(sorted(list(found_words)))
