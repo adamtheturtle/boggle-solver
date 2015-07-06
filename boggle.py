@@ -187,14 +187,46 @@ class GetPositionsTests(unittest.TestCase):
         )
 
 class PositionsTouchingTests(unittest.TestCase):
+    """
+    Tests for `positions_touching`.
+    """
 
-    def test_adjacent(self):
+    def test_adjacent_left(self):
+        """
+        If the second piece is on the left of the first, the pieces are
+        touching.
+        """
+        self.assertTrue(positions_touching(first=(1, 0), second=(0, 0)))
+
+    def test_adjacent_right(self):
+        """
+        If the second piece is on the right of the first, the pieces are
+        touching.
+        """
         self.assertTrue(positions_touching(first=(0, 0), second=(1, 0)))
 
+    def test_adjacent_above(self):
+        """
+        If the second piece is above the first, the pieces are touching.
+        """
+        self.assertTrue(positions_touching(first=(0, 1), second=(0, 0)))
+
+    def test_adjacent_below(self):
+        """
+        If the second piece is below the first, the pieces are touching.
+        """
+        self.assertTrue(positions_touching(first=(0, 0), second=(0, 1)))
+
     def test_diagonal(self):
+        """
+        If the second piece is diagonal to the first, the pieces are touching.
+        """
         self.assertTrue(positions_touching(first=(0, 0), second=(1, 1)))
 
     def test_not_touching(self):
+        """
+        Unconnected pieces are not touching.
+        """
         self.assertFalse(positions_touching(first=(0, 0), second=(0, 2)))
 
 if __name__ == "__main__":
