@@ -1,9 +1,12 @@
-# python -m unittest boggle
-
 import copy
 import unittest
 
-# TODO travis
+# TODO Add pyflakes to travis
+# TODO possible optimisations -
+#   * Decrease the dictionary length to remove "'"s etc.
+#   * Decrease the dictionary length to remove two letter words.
+#   * Stop after one valid route
+
 
 def get_positions(letter, board):
     """
@@ -19,6 +22,7 @@ def get_positions(letter, board):
                 positions.append((column_index, row_index))
     return positions
 
+
 def positions_touching(first, second):
     """
     Given two tile positions, check whether they are touching.
@@ -30,6 +34,7 @@ def positions_touching(first, second):
         or diagonal.
     """
     return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
+
 
 def get_routes(word, board):
     """
@@ -71,6 +76,7 @@ def get_routes(word, board):
 
     return valid_routes
 
+
 def list_words(board, dictionary):
     """
     Return all words from a given dictionary which are in a board.
@@ -88,6 +94,7 @@ def list_words(board, dictionary):
         if len(routes) and len(word) > 2:
             word_list.add(word)
     return word_list
+
 
 class GetRoutesTests(unittest.TestCase):
     """
@@ -121,7 +128,7 @@ class GetRoutesTests(unittest.TestCase):
                 word='ABC',
                 board=[
                     ['D', 'E', 'F'],
-                ]
+                ],
             )
         )
 
@@ -152,6 +159,7 @@ class GetRoutesTests(unittest.TestCase):
                 ],
             )
         )
+
 
 class ListWordsTests(unittest.TestCase):
     """
@@ -228,6 +236,7 @@ class ListWordsTests(unittest.TestCase):
             )
         )
 
+
 class GetPositionsTests(unittest.TestCase):
     """
     Tests for get_positions.
@@ -277,6 +286,7 @@ class GetPositionsTests(unittest.TestCase):
             )
         )
 
+
 class PositionsTouchingTests(unittest.TestCase):
     """
     Tests for `positions_touching`.
@@ -288,16 +298,16 @@ class PositionsTouchingTests(unittest.TestCase):
         """
         self.assertTrue(
             all([
-                    # Second on right on first.
-                    positions_touching(first=(1, 0), second=(0, 0)),
-                    # Second on left of first.
-                    positions_touching(first=(1, 0), second=(0, 0)),
-                    # Second above first.
-                    positions_touching(first=(0, 1), second=(0, 0)),
-                    # Second below first.
-                    positions_touching(first=(0, 0), second=(0, 1)),
-                ]
-            ))
+                # Second on right on first.
+                positions_touching(first=(1, 0), second=(0, 0)),
+                # Second on left of first.
+                positions_touching(first=(1, 0), second=(0, 0)),
+                # Second above first.
+                positions_touching(first=(0, 1), second=(0, 0)),
+                # Second below first.
+                positions_touching(first=(0, 0), second=(0, 1)),
+                ],
+                ))
 
     def test_not_touching(self):
         """
