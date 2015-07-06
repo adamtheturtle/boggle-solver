@@ -6,5 +6,6 @@ python:
   - "3.3"
   - "3.4"
   - "nightly"
+# There are currently no requirements
 # command to run tests
 script: python -m unittest boggle
