@@ -8,7 +8,7 @@ python:
   - "nightly"
 before_install: "pip install codecov"
 install:
-  - "pip install flake8 --use-mirrors"
+  - "pip install flake8"
 before_script: "flake8 *.py"
 # command to run tests
 script: python -m unittest boggle
