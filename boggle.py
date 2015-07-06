@@ -6,8 +6,15 @@ import unittest
 # TODO does this handle Qu?
 # TODO always lowercase
 # TODO travis
+# TODO replace letter with tile
 
 def get_positions(letter, board):
+    """
+    Return a list of positions a letter can be found on a board.
+
+    letter: A letter on a tile.
+    return: List of (column, row) co-ordinates of tiles containing this letter.
+    """
     positions = []
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
@@ -207,41 +214,26 @@ class PositionsTouchingTests(unittest.TestCase):
     Tests for `positions_touching`.
     """
 
-    def test_adjacent_left(self):
+    def test_touching(self):
         """
-        If the second piece is on the left of the first, the pieces are
-        touching.
+        If tiles are touching, positions_touching returns True.
         """
-        self.assertTrue(positions_touching(first=(1, 0), second=(0, 0)))
-
-    def test_adjacent_right(self):
-        """
-        If the second piece is on the right of the first, the pieces are
-        touching.
-        """
-        self.assertTrue(positions_touching(first=(0, 0), second=(1, 0)))
-
-    def test_adjacent_above(self):
-        """
-        If the second piece is above the first, the pieces are touching.
-        """
-        self.assertTrue(positions_touching(first=(0, 1), second=(0, 0)))
-
-    def test_adjacent_below(self):
-        """
-        If the second piece is below the first, the pieces are touching.
-        """
-        self.assertTrue(positions_touching(first=(0, 0), second=(0, 1)))
-
-    def test_diagonal(self):
-        """
-        If the second piece is diagonal to the first, the pieces are touching.
-        """
-        self.assertTrue(positions_touching(first=(0, 0), second=(1, 1)))
+        self.assertTrue(
+            all([
+                    # Second on right on first.
+                    positions_touching(first=(1, 0), second=(0, 0)),
+                    # Second on left of first.
+                    positions_touching(first=(1, 0), second=(0, 0)),
+                    # Second above first.
+                    positions_touching(first=(0, 1), second=(0, 0)),
+                    # Second below first.
+                    positions_touching(first=(0, 0), second=(0, 1)),
+                ]
+            ))
 
     def test_not_touching(self):
         """
-        Unconnected pieces are not touching.
+        If tiles are not touching, positions_touching returns False.
         """
         self.assertFalse(positions_touching(first=(0, 0), second=(0, 2)))
 
@@ -251,11 +243,11 @@ if __name__ == "__main__":
     found_words = list_words(
         dictionary=english_words,
         board=[
-            ['qu', 'a', 'a', 'm', 'd'],
-            ['a', 'l', 'g', 'o', 'o'],
-            ['r', 'g', 'i', 'd', 'e'],
-            ['o', 'n', 'f', 'y', 'r'],
-            ['r', 'e', 'l', 'l', 's'],
+            ['Qu', 'A', 'A', 'M', 'D'],
+            ['A', 'L', 'G', 'O', 'O'],
+            ['R', 'G', 'I', 'D', 'E'],
+            ['O', 'N', 'F', 'Y', 'R'],
+            ['R', 'E', 'L', 'L', 'S'],
         ],
     )
     print len(found_words)
