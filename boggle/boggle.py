@@ -70,7 +70,7 @@ def get_routes(word, board):
     for letter in word:
         positions = get_positions(letter, board)
         if not len(routes):
-            new_routes = [[position] for position in positions]
+            routes = [[position] for position in positions]
         else:
             new_routes = []
 
@@ -81,7 +81,7 @@ def get_routes(word, board):
                         new_route.append(position)
                         new_routes.append(new_route)
 
-        routes = copy.copy(new_routes)
+            routes = copy.copy(new_routes)
 
     return [route for route in routes if is_valid_route(word, route)]
 
