@@ -16,6 +16,7 @@ found_words = list_words(
         ['R', 'E', 'L', 'L', 'S'],
     ],
 )
+
 print(len(found_words))
-from pprint import pprint
-pprint(sorted(list(found_words)))
+# from pprint import pprint
+# pprint(sorted(list(found_words)))

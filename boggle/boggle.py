@@ -35,6 +35,23 @@ def positions_touching(first, second):
     return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
 
 
+def is_valid_route(word, route):
+    """
+    Check if a route is valid.
+
+    A route is valid if it contains the same number of letters as the word it
+    represents and does not use the same tile multiple times.
+
+    word: A string.
+    route: A list of tile positions.
+
+    return: Boolean, True iff a route is valid.
+    """
+    no_duplicates = len(set(route)) == len(route)
+    includes_whole_word = len(route) == len(word)
+    return no_duplicates and includes_whole_word
+
+
 def get_routes(word, board):
     """
     Get available routes to make a word in a board.
@@ -66,14 +83,7 @@ def get_routes(word, board):
 
         routes = copy.copy(new_routes)
 
-    valid_routes = []
-    for route in routes:
-        no_duplicates = len(set(route)) == len(route)
-        includes_whole_word = len(route) == len(word)
-        if no_duplicates and includes_whole_word:
-            valid_routes.append(route)
-
-    return valid_routes
+    return [route for route in routes if is_valid_route(word, route)]
 
 
 def list_words(board, dictionary):
