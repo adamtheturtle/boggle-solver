@@ -64,7 +64,10 @@ def is_available_route(word, board):
     routes = []
 
     for letter in word:
-        positions = get_positions(letter, board)
+        try:
+            positions = board[letter]
+        except KeyError:
+            return False
         if not len(routes):
             routes = [[position] for position in positions]
         else:
@@ -83,6 +86,28 @@ def is_available_route(word, board):
 
     return False
 
+def get_tile_mapping(board):
+    """
+    Get a mapping of tiles to positions.
+
+    board: A list of lists of tiles. Each list in the list of lists represents
+        a row of a Boggle board.
+
+    return: Dictionary, each key representing a tile content (letter of
+        alphabet [not Q] or Qu)
+    """
+    mapping = {}
+    # TODO test directly for this
+    for row_index, row in enumerate(board):
+        for column_index, piece in enumerate(row):
+            board[row_index][column_index] = board[row_index][column_index].upper()
+            board[row_index][column_index] = board[row_index][column_index].replace('QU', 'Q')
+            position = (column_index, row_index)
+            try:
+                mapping[board[row_index][column_index]].append(position)
+            except KeyError:
+                mapping[board[row_index][column_index]] = [position]
+    return mapping
 
 def list_words(board, dictionary):
     """
@@ -94,10 +119,12 @@ def list_words(board, dictionary):
 
     returns: A set of strings.
     """
+    mapping = get_tile_mapping(board)
+
     word_list = set()
     for word in dictionary:
         word = word.upper()
         if (len(word) > 2 and
-                is_available_route(word.replace('QU', 'Q'), board)):
+                is_available_route(word.replace('QU', 'Q'), mapping)):
             word_list.add(word)
     return word_list
