@@ -2,6 +2,7 @@ import copy
 
 # TODO add a way to input a board (text file / photo)
 
+
 def positions_touching(first, second):
     """
     Given two tile positions, check whether they are touching.
@@ -66,6 +67,7 @@ def is_available_route(word, tile_map):
 
     return False
 
+
 def get_tile_mapping(board):
     """
     Get a mapping of tiles to positions.
@@ -79,14 +81,15 @@ def get_tile_mapping(board):
     mapping = {}
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
-            board[row_index][column_index] = board[row_index][column_index].upper()
-            board[row_index][column_index] = board[row_index][column_index].replace('QU', 'Q')
+            tile = board[row_index][column_index].upper().replace('QU', 'Q')
+            board[row_index][column_index] = tile
             position = (column_index, row_index)
             try:
-                mapping[board[row_index][column_index]].append(position)
+                mapping[tile].append(position)
             except KeyError:
-                mapping[board[row_index][column_index]] = [position]
+                mapping[tile] = [position]
     return mapping
+
 
 def tiles_available(word, tile_map):
     """
@@ -98,7 +101,6 @@ def tiles_available(word, tile_map):
 
     return: Boolean, True iff all tiles are available.
     """
-    # TODO direct tests for this
     for letter in word:
         try:
             if word.count(letter) > len(tile_map[letter]):
@@ -106,6 +108,7 @@ def tiles_available(word, tile_map):
         except KeyError:
             return False
     return True
+
 
 def list_words(board, dictionary):
     """

@@ -13,6 +13,7 @@ from boggle.boggle import (
     is_valid_route,
 )
 
+
 class GetTileMappingTests(unittest.TestCase):
     """
     Tests for `get_tile_mapping`.
@@ -31,7 +32,7 @@ class GetTileMappingTests(unittest.TestCase):
                 board=[
                     ['A', 'A'],
                     ['A', 'B'],
-                ]
+                ],
             )
         )
 
@@ -46,7 +47,7 @@ class GetTileMappingTests(unittest.TestCase):
             get_tile_mapping(
                 board=[
                     ['A'],
-                ]
+                ],
             )
         )
 
@@ -61,9 +62,10 @@ class GetTileMappingTests(unittest.TestCase):
             get_tile_mapping(
                 board=[
                     ['Qu'],
-                ]
+                ],
             )
         )
+
 
 class TilesAvailableTests(unittest.TestCase):
     """
@@ -115,6 +117,7 @@ class TilesAvailableTests(unittest.TestCase):
                 ),
             )
         )
+
 
 class IsAvailableRouteTests(unittest.TestCase):
     """
