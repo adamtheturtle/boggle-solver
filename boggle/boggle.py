@@ -98,6 +98,6 @@ def list_words(board, dictionary):
     for word in dictionary:
         word = word.upper()
         if (len(word) > 2 and
-            is_available_route(word.replace('QU', 'Q'), board)):
+                is_available_route(word.replace('QU', 'Q'), board)):
             word_list.add(word)
     return word_list
