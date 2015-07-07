@@ -5,29 +5,25 @@ Tests for solving a game of Boggle.
 import unittest
 
 from boggle.boggle import (
-    get_routes,
-    list_words,
     get_positions,
+    list_words,
     positions_touching,
+    is_available_route,
     is_valid_route,
 )
 
 
-class GetRoutesTests(unittest.TestCase):
+class IsAvailableRouteTests(unittest.TestCase):
     """
-    Tests for `get_routes`.
+    Tests for `is_available_route`.
     """
 
     def test_route(self):
         """
-        A list of lists positions between the first and last letter is
-        returned.
+        If there is a route between each letter, True is returned.
         """
-        self.assertEqual(
-            [
-                [(0, 0), (1, 0), (2, 0)],
-            ],
-            get_routes(
+        self.assertTrue(
+            is_available_route(
                 word='ABC',
                 board=[
                     ['A', 'B', 'C'],
@@ -37,11 +33,10 @@ class GetRoutesTests(unittest.TestCase):
 
     def test_not_in_board(self):
         """
-        If a word is not available in the board, an empty list is returned.
+        If a word is not available in the board, False is returned.
         """
-        self.assertEqual(
-            [],
-            get_routes(
+        self.assertFalse(
+            is_available_route(
                 word='ABC',
                 board=[
                     ['D', 'E', 'F'],
@@ -49,30 +44,15 @@ class GetRoutesTests(unittest.TestCase):
             )
         )
 
-    def test_cannot_reuse_tile(self):
+    def test_invalid_route(self):
         """
-        The same tile cannot be reused.
+        If only an invalid route is available, False is returned.
         """
-        self.assertEqual(
-            [],
-            get_routes(
+        self.assertFalse(
+            is_available_route(
                 word='ABA',
                 board=[
                     ['A', 'B'],
-                ],
-            )
-        )
-
-    def test_all_letters_necessary(self):
-        """
-        A route does not exist if not all letters are available.
-        """
-        self.assertEqual(
-            [],
-            get_routes(
-                word='ABCD',
-                board=[
-                    ['A', 'C', 'D'],
                 ],
             )
         )

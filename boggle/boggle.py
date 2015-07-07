@@ -1,10 +1,6 @@
 import copy
 
 # TODO add a way to input a board (text file / photo)
-# TODO possible optimisations -
-#   * Decrease the dictionary length to remove "'"s etc.
-#   * Decrease the dictionary length to remove two letter words.
-#   * Stop after one valid route
 
 
 def get_positions(letter, board):
@@ -52,9 +48,9 @@ def is_valid_route(word, route):
     return no_duplicates and includes_whole_word
 
 
-def get_routes(word, board):
+def is_available_route(word, board):
     """
-    Get available routes to make a word in a board.
+    Check if there is an available route to make a word in a board.
 
     A route is a path of positions from first tile to next, to next... until
     the last tile. It cannot include the same tile multiple times.
@@ -63,7 +59,7 @@ def get_routes(word, board):
     board: A list of lists of tiles. Each list in the list of lists represents
         a row of a Boggle board.
 
-    returns: List of lists of tile positions.
+    returns: Boolean, True iff there is a valid route.
     """
     routes = []
 
@@ -79,11 +75,13 @@ def get_routes(word, board):
                     if positions_touching(route[len(route) - 1], position):
                         new_route = copy.copy(route)
                         new_route.append(position)
+                        if is_valid_route(word, new_route):
+                            return True
                         new_routes.append(new_route)
 
             routes = copy.copy(new_routes)
 
-    return [route for route in routes if is_valid_route(word, route)]
+    return False
 
 
 def list_words(board, dictionary):
@@ -99,7 +97,7 @@ def list_words(board, dictionary):
     word_list = set()
     for word in dictionary:
         word = word.upper()
-        routes = get_routes(word.replace('QU', 'Q'), board)
-        if len(routes) and len(word) > 2:
+        if (len(word) > 2 and
+            is_available_route(word.replace('QU', 'Q'), board)):
             word_list.add(word)
     return word_list
