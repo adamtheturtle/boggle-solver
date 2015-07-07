@@ -252,6 +252,7 @@ class ListWordsTests(unittest.TestCase):
     """
     Tests for `list_words`.
     """
+
     def test_list_words(self):
         """
         A set of available words is returned.
@@ -263,6 +264,21 @@ class ListWordsTests(unittest.TestCase):
                 board=[
                     ['A', 'B', 'C'],
                     ['D', 'E', 'F'],
+                ],
+            )
+        )
+
+    def test_no_duplicates(self):
+        """
+        Words which, ignoring case, are duplicated in the word list, are only
+        returned once.
+        """
+        self.assertEqual(
+            set(['ABC']),
+            list_words(
+                word_list=set(['ABC', 'abc']),
+                board=[
+                    ['A', 'B', 'C'],
                 ],
             )
         )
