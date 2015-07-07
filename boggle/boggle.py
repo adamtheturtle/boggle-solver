@@ -77,7 +77,6 @@ def get_tile_mapping(board):
         alphabet [not Q] or Qu)
     """
     mapping = {}
-    # TODO test directly for this
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
             board[row_index][column_index] = board[row_index][column_index].upper()
@@ -89,20 +88,20 @@ def get_tile_mapping(board):
                 mapping[board[row_index][column_index]] = [position]
     return mapping
 
-def tiles_available(word, tiles):
+def tiles_available(word, tile_map):
     """
     Check if there are enough of each required tile to make a word.
 
     word: A string.
-    tiles: A mapping of tiles available in a Boggle board to positions on that
-        board.
+    tile_map: A mapping of tiles available in a Boggle board to positions on
+        that board.
 
     return: Boolean, True iff all tiles are available.
     """
     # TODO direct tests for this
     for letter in word:
         try:
-            if word.count(letter) > len(tiles[letter]):
+            if word.count(letter) > len(tile_map[letter]):
                 return False
         except KeyError:
             return False
@@ -125,7 +124,7 @@ def list_words(board, dictionary):
         long_enough = len(word) > 2
         word = word.upper().replace('QU', 'Q')
         if (long_enough and
-                tiles_available(word, mapping) and
-                is_available_route(word, mapping)):
+                tiles_available(word=word, tile_map=mapping) and
+                is_available_route(word=word, tile_map=mapping)):
             word_list.add(word.replace('Q', 'QU'))
     return word_list

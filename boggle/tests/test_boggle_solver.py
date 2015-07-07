@@ -7,6 +7,7 @@ import unittest
 from boggle.boggle import (
     list_words,
     positions_touching,
+    tiles_available,
     get_tile_mapping,
     is_available_route,
     is_valid_route,
@@ -31,6 +32,57 @@ class GetTileMappingTests(unittest.TestCase):
                     ['A', 'A'],
                     ['A', 'B'],
                 ]
+            )
+        )
+
+class TilesAvailableTests(unittest.TestCase):
+    """
+    Tests for `tiles_available`.
+    """
+
+    def test_tile_available(self):
+        """
+        True is returned if all there are enough available tiles of each type.
+        """
+        self.assertTrue(
+            tiles_available(
+                word='ABC',
+                tile_map=get_tile_mapping(
+                    board=[
+                        ['A', 'C', 'B'],
+                    ],
+                ),
+            )
+        )
+
+    def test_tile_unavailable(self):
+        """
+        False is returned if a tile is unavailable.
+        """
+        self.assertFalse(
+            tiles_available(
+                word='A',
+                tile_map=get_tile_mapping(
+                    board=[
+                        ['B'],
+                    ],
+                ),
+            )
+        )
+
+    def test_not_enough_tiles(self):
+        """
+        False is returned if there are fewer instances of a tile in the board
+        than the given word.
+        """
+        self.assertFalse(
+            tiles_available(
+                word='AA',
+                tile_map=get_tile_mapping(
+                    board=[
+                        ['A'],
+                    ],
+                ),
             )
         )
 
