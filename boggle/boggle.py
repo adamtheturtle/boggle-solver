@@ -47,6 +47,9 @@ def is_available_route(word, tile_map):
     """
     routes = []
 
+    if not tiles_available(word=word, tile_map=tile_map):
+        return False
+
     for letter in word:
         positions = tile_map[letter]
         if not len(routes):
@@ -68,7 +71,7 @@ def is_available_route(word, tile_map):
     return False
 
 
-def get_tile_mapping(board):
+def get_tile_map(board):
     """
     Get a mapping of tiles to positions.
 
@@ -109,24 +112,32 @@ def tiles_available(word, tile_map):
     return True
 
 
-def list_words(board, dictionary):
+def is_valid_word(word, tile_map):
+    """
+    Return whether a word is valid and can be found on a board.
+
+    word: A string.
+    tile_map: A mapping of tiles available in a Boggle board to positions on
+        that board.
+
+    return: Boolean, True iff a word is valid.
+    """
+    long_enough = len(word) > 2
+    word = word.upper().replace('QU', 'Q')
+    return (long_enough and
+            is_available_route(word=word, tile_map=tile_map))
+
+
+def list_words(board, word_list):
     """
     Return all words from a given dictionary which are in a board.
 
-    dictionary: A set of valid words.
+    word_list: A set of valid words.
     board: A list of lists of tiles. Each list in the list of lists represents
         a row of a Boggle board.
 
     returns: A set of strings.
     """
-    mapping = get_tile_mapping(board)
-
-    word_list = set()
-    for word in dictionary:
-        long_enough = len(word) > 2
-        word = word.upper().replace('QU', 'Q')
-        if (long_enough and
-                tiles_available(word=word, tile_map=mapping) and
-                is_available_route(word=word, tile_map=mapping)):
-            word_list.add(word.replace('Q', 'QU'))
-    return word_list
+    tile_map = get_tile_map(board)
+    valid_words = filter(lambda word: is_valid_word(word, tile_map), word_list)
+    return set(map(lambda word: word.upper(), valid_words))
