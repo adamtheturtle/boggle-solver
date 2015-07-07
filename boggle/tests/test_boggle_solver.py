@@ -12,6 +12,27 @@ from boggle.boggle import (
     is_valid_route,
 )
 
+class GetTileMappingTests(unittest.TestCase):
+    """
+    Tests for `get_tile_mapping`.
+    """
+
+    def test_tile_mapping(self):
+        """
+        Tiles are mapped to positions they appear in.
+        """
+        self.assertEqual(
+            {
+                'A': [(0, 0), (1, 0), (0, 1)],
+                'B': [(1, 1)],
+            },
+            get_tile_mapping(
+                board=[
+                    ['A', 'A'],
+                    ['A', 'B'],
+                ]
+            )
+        )
 
 class IsAvailableRouteTests(unittest.TestCase):
     """
