@@ -82,7 +82,6 @@ def get_tile_mapping(board):
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
             tile = board[row_index][column_index].upper().replace('QU', 'Q')
-            board[row_index][column_index] = tile
             position = (column_index, row_index)
             try:
                 mapping[tile].append(position)
