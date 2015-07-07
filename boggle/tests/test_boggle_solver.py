@@ -35,6 +35,36 @@ class GetTileMappingTests(unittest.TestCase):
             )
         )
 
+    def test_lowercase(self):
+        """
+        Lowercase tiles are mapped to their uppercase counterparts.
+        """
+        self.assertEqual(
+            {
+                'A': [(0, 0)],
+            },
+            get_tile_mapping(
+                board=[
+                    ['A'],
+                ]
+            )
+        )
+
+    def test_qu_mapped_to_u(self):
+        """
+        "Qu" tiles are mapped to "Q".
+        """
+        self.assertEqual(
+            {
+                'Q': [(0, 0)],
+            },
+            get_tile_mapping(
+                board=[
+                    ['Qu'],
+                ]
+            )
+        )
+
 class TilesAvailableTests(unittest.TestCase):
     """
     Tests for `tiles_available`.
