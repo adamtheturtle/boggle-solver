@@ -5,9 +5,9 @@ Tests for solving a game of Boggle.
 import unittest
 
 from boggle.boggle import (
-    get_positions,
     list_words,
     positions_touching,
+    get_tile_mapping,
     is_available_route,
     is_valid_route,
 )
@@ -25,9 +25,9 @@ class IsAvailableRouteTests(unittest.TestCase):
         self.assertTrue(
             is_available_route(
                 word='ABC',
-                board=[
+                tile_map=get_tile_mapping([
                     ['A', 'B', 'C'],
-                ],
+                ]),
             )
         )
 
@@ -38,9 +38,9 @@ class IsAvailableRouteTests(unittest.TestCase):
         self.assertFalse(
             is_available_route(
                 word='ABC',
-                board=[
-                    ['D', 'E', 'F'],
-                ],
+                tile_map=get_tile_mapping([
+                    ['A', 'C', 'B'],
+                ]),
             )
         )
 
@@ -51,9 +51,9 @@ class IsAvailableRouteTests(unittest.TestCase):
         self.assertFalse(
             is_available_route(
                 word='ABA',
-                board=[
+                tile_map=get_tile_mapping([
                     ['A', 'B'],
-                ],
+                ]),
             )
         )
 
@@ -129,56 +129,6 @@ class ListWordsTests(unittest.TestCase):
                 dictionary=set(['ABC']),
                 board=[
                     ['A', 'B', 'c'],
-                ],
-            )
-        )
-
-
-class GetPositionsTests(unittest.TestCase):
-    """
-    Tests for get_positions.
-    """
-
-    def test_get_positions(self):
-        """
-        A list of position tuples
-        """
-        self.assertEqual(
-            [(0, 0), (2, 0), (0, 1)],
-            get_positions(
-                letter='A',
-                board=[
-                    ['A', 'X', 'A', 'X', 'X'],
-                    ['A', 'X', 'X', 'X', 'X'],
-                ],
-            )
-        )
-
-    def test_case_insensitive(self):
-        """
-        The case of the letter does not matter.
-        """
-        self.assertEqual(
-            [(0, 0), (0, 1)],
-            get_positions(
-                letter='a',
-                board=[
-                    ['a'],
-                    ['A'],
-                ],
-            )
-        )
-
-    def test_first_letter_only(self):
-        """
-        Only the first letter is compared. This is to handle the "Qu" tile.
-        """
-        self.assertEqual(
-            [(0, 0)],
-            get_positions(
-                letter='AB',
-                board=[
-                    ['AC'],
                 ],
             )
         )

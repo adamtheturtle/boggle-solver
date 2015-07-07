@@ -2,22 +2,6 @@ import copy
 
 # TODO add a way to input a board (text file / photo)
 
-
-def get_positions(letter, board):
-    """
-    Return a list of positions a letter can be found on a board.
-
-    letter: A letter on a tile.
-    return: List of (column, row) co-ordinates of tiles containing this letter.
-    """
-    positions = []
-    for row_index, row in enumerate(board):
-        for column_index, piece in enumerate(row):
-            if piece[0].upper() == letter[0].upper():
-                positions.append((column_index, row_index))
-    return positions
-
-
 def positions_touching(first, second):
     """
     Given two tile positions, check whether they are touching.
@@ -48,7 +32,7 @@ def is_valid_route(word, route):
     return no_duplicates and includes_whole_word
 
 
-def is_available_route(word, board):
+def is_available_route(word, tile_map):
     """
     Check if there is an available route to make a word in a board.
 
@@ -56,18 +40,14 @@ def is_available_route(word, board):
     the last tile. It cannot include the same tile multiple times.
 
     word: A string.
-    board: A list of lists of tiles. Each list in the list of lists represents
-        a row of a Boggle board.
+    tile_map: Map of tiles to positions those tiles are in.
 
     returns: Boolean, True iff there is a valid route.
     """
     routes = []
 
     for letter in word:
-        try:
-            positions = board[letter]
-        except KeyError:
-            return False
+        positions = tile_map[letter]
         if not len(routes):
             routes = [[position] for position in positions]
         else:
@@ -109,6 +89,25 @@ def get_tile_mapping(board):
                 mapping[board[row_index][column_index]] = [position]
     return mapping
 
+def tiles_available(word, tiles):
+    """
+    Check if there are enough of each required tile to make a word.
+
+    word: A string.
+    tiles: A mapping of tiles available in a Boggle board to positions on that
+        board.
+
+    return: Boolean, True iff all tiles are available.
+    """
+    # TODO direct tests for this
+    for letter in word:
+        try:
+            if word.count(letter) > len(tiles[letter]):
+                return False
+        except KeyError:
+            return False
+    return True
+
 def list_words(board, dictionary):
     """
     Return all words from a given dictionary which are in a board.
@@ -123,8 +122,10 @@ def list_words(board, dictionary):
 
     word_list = set()
     for word in dictionary:
-        word = word.upper()
-        if (len(word) > 2 and
-                is_available_route(word.replace('QU', 'Q'), mapping)):
-            word_list.add(word)
+        long_enough = len(word) > 2
+        word = word.upper().replace('QU', 'Q')
+        if (long_enough and
+                tiles_available(word, mapping) and
+                is_available_route(word, mapping)):
+            word_list.add(word.replace('Q', 'QU'))
     return word_list
