@@ -16,7 +16,7 @@ def positions_touching(first, second):
     return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
 
 
-def is_valid_route(word, route):
+def is_valid_route(word_length, route):
     """
     Check if a route is valid.
 
@@ -29,7 +29,7 @@ def is_valid_route(word, route):
     return: Boolean, True iff a route is valid.
     """
     no_duplicates = len(set(route)) == len(route)
-    includes_whole_word = len(route) == len(word)
+    includes_whole_word = len(route) == word_length
     return no_duplicates and includes_whole_word
 
 
@@ -47,6 +47,7 @@ def is_available_route(word, tile_map):
     """
     routes = []
 
+    word_length = len(word)
     if not tiles_available(word=word, tile_map=tile_map):
         return False
 
@@ -62,7 +63,7 @@ def is_available_route(word, tile_map):
                     if positions_touching(route[len(route) - 1], position):
                         new_route = copy.copy(route)
                         new_route.append(position)
-                        if is_valid_route(word, new_route):
+                        if is_valid_route(word_length, new_route):
                             return True
                         new_routes.append(new_route)
 
