@@ -36,26 +36,27 @@ def is_available_route(word, tile_map):
 
     for letter in word:
         positions = tile_map[letter]
+        new_routes = []
+
+        for route in routes:
+            for position in positions:
+                if (positions_touching(route[len(route) - 1], position) and
+                        position not in route):
+                    new_route = copy.copy(route)
+                    new_route.append(position)
+                    includes_whole_word = len(new_route) == word_length
+                    if includes_whole_word:
+                        return True
+                    new_routes.append(new_route)
+
         if not len(routes):
-            routes = [[position] for position in positions]
-        else:
-            new_routes = []
+            routes = routes or [[position] for position in positions]
+            continue
 
-            for route in routes:
-                for position in positions:
-                    if (positions_touching(route[len(route) - 1], position) and
-                            position not in route):
-                        new_route = copy.copy(route)
-                        new_route.append(position)
-                        includes_whole_word = len(new_route) == word_length
-                        if includes_whole_word:
-                            return True
-                        new_routes.append(new_route)
+        if not new_routes:
+            return False
 
-            if not new_routes:
-                return False
-
-            routes = copy.copy(new_routes)
+        routes = copy.copy(new_routes)
 
 
 def get_tile_map(board):
