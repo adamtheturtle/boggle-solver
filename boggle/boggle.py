@@ -1,5 +1,3 @@
-import copy
-
 # TODO add a way to input a board (text file / photo)
 
 
@@ -31,8 +29,6 @@ def is_available_route(word, tile_map):
     routes = []
 
     word_length = len(word)
-    if not tiles_available(word=word, tile_map=tile_map):
-        return False
 
     for letter in word:
         positions = tile_map[letter]
@@ -42,7 +38,7 @@ def is_available_route(word, tile_map):
             for position in positions:
                 if (positions_touching(route[len(route) - 1], position) and
                         position not in route):
-                    new_route = copy.copy(route)
+                    new_route = route[:]
                     new_route.append(position)
                     includes_whole_word = len(new_route) == word_length
                     if includes_whole_word:
@@ -113,6 +109,7 @@ def is_valid_word(word, tile_map):
     long_enough = len(word) > 2
     word = word.upper().replace('QU', 'Q')
     return (long_enough and
+            tiles_available(word=word, tile_map=tile_map) and
             is_available_route(word=word, tile_map=tile_map))
 
 
