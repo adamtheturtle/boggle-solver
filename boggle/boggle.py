@@ -1,6 +1,13 @@
 # TODO add a way to input a board (text file / photo)
 
 
+class Tile(object):
+
+    def __init__(self, column, row):
+        self.column = column
+        self.row = row
+
+
 def positions_touching(first, second):
     """
     Given two tile positions, check whether they are touching.
@@ -11,7 +18,9 @@ def positions_touching(first, second):
     return: Bool, true iff the tiles are touching - immediately above, below
         or diagonal.
     """
-    return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
+    return (
+        abs(first.column - second.column) <= 1 and
+        abs(first.row - second.row) <= 1)
 
 
 def is_available_route(word, tile_map):
@@ -72,7 +81,7 @@ def get_tile_map(board):
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
             tile = board[row_index][column_index].upper().replace('QU', 'Q')
-            position = (column_index, row_index)
+            position = Tile(column=column_index, row=row_index)
             try:
                 mapping[tile].append(position)
             except KeyError:
