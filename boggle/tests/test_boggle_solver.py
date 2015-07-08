@@ -25,12 +25,12 @@ class IsValidWord(unittest.TestCase):
         Words of at least three letters which have an available route are
         valid.
         """
-        self.assertFalse(
+        self.assertTrue(
             is_valid_word(
-                word='AB',
+                word='ABC',
                 tile_map=get_tile_map(
-                   board=[
-                       ['A', 'B'],
+                    board=[
+                        ['A', 'B', 'C'],
                     ],
                 )
             )
@@ -44,8 +44,8 @@ class IsValidWord(unittest.TestCase):
             is_valid_word(
                 word='AB',
                 tile_map=get_tile_map(
-                   board=[
-                       ['A', 'B'],
+                    board=[
+                        ['A', 'B'],
                     ],
                 )
             )
@@ -59,8 +59,8 @@ class IsValidWord(unittest.TestCase):
             is_valid_word(
                 word='ABC',
                 tile_map=get_tile_map(
-                   board=[
-                       ['A', 'C', 'B'],
+                    board=[
+                        ['A', 'C', 'B'],
                     ],
                 )
             )
