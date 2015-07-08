@@ -1,13 +1,8 @@
-# TODO add a way to input a board (text file / photo)
-
-
-# TODO put this in a separate file, and test separately
 class Tile(object):
 
     def __init__(self, column, row):
         self.column = column
         self.row = row
-        self.touching_map = {}
 
     def __eq__(self, other):
         return self.row == other.row and self.column == other.column
@@ -21,14 +16,9 @@ class Tile(object):
         return: Bool, true iff the tiles are touching - immediately above,
             below or diagonal.
         """
-        try:
-            return self.touching_map[other]
-        except KeyError:
-            touching = (
-                abs(self.row - other.row) <= 1 and
-                abs(self.column - other.column) <= 1)
-            self.touching_map[other] = touching
-            return touching
+        return(
+            abs(self.row - other.row) <= 1 and
+            abs(self.column - other.column) <= 1)
 
 
 def is_available_route(word, tile_map):
