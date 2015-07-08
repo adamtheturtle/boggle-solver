@@ -1,5 +1,3 @@
-import copy
-
 # TODO add a way to input a board (text file / photo)
 
 
@@ -16,23 +14,6 @@ def positions_touching(first, second):
     return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
 
 
-def is_valid_route(word, route):
-    """
-    Check if a route is valid.
-
-    A route is valid if it contains the same number of letters as the word it
-    represents and does not use the same tile multiple times.
-
-    word: A string.
-    route: A list of tile positions.
-
-    return: Boolean, True iff a route is valid.
-    """
-    no_duplicates = len(set(route)) == len(route)
-    includes_whole_word = len(route) == len(word)
-    return no_duplicates and includes_whole_word
-
-
 def is_available_route(word, tile_map):
     """
     Check if there is an available route to make a word in a board.
@@ -47,28 +28,34 @@ def is_available_route(word, tile_map):
     """
     routes = []
 
-    if not tiles_available(word=word, tile_map=tile_map):
-        return False
+    word_length = len(word)
 
     for letter in word:
         positions = tile_map[letter]
+        new_routes = []
+
+        for route in routes:
+            last_position = route[len(route) - 1]
+            for position in positions:
+                # TODO do set comparison with tile map[letter] and touching
+                # positions of a position from a map
+                if (positions_touching(last_position, position) and
+                        position not in route):
+                    new_route = route[:]
+                    new_route.append(position)
+                    includes_whole_word = len(new_route) == word_length
+                    if includes_whole_word:
+                        return True
+                    new_routes.append(new_route)
+
         if not len(routes):
-            routes = [[position] for position in positions]
-        else:
-            new_routes = []
+            routes = routes or [[position] for position in positions]
+            continue
 
-            for route in routes:
-                for position in positions:
-                    if positions_touching(route[len(route) - 1], position):
-                        new_route = copy.copy(route)
-                        new_route.append(position)
-                        if is_valid_route(word, new_route):
-                            return True
-                        new_routes.append(new_route)
+        if not new_routes:
+            return False
 
-            routes = copy.copy(new_routes)
-
-    return False
+        routes = new_routes
 
 
 def get_tile_map(board):
@@ -125,6 +112,7 @@ def is_valid_word(word, tile_map):
     long_enough = len(word) > 2
     word = word.upper().replace('QU', 'Q')
     return (long_enough and
+            tiles_available(word=word, tile_map=tile_map) and
             is_available_route(word=word, tile_map=tile_map))
 
 

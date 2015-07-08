@@ -1,22 +1,31 @@
 from __future__ import print_function
 import io
+import string
+import random
 
 from boggle.boggle import list_words
 
-with io.open("/usr/share/dict/words", encoding='latin-1') as word_file:
-    english_words = set(word.strip() for word in word_file)
 
-found_words = list_words(
-    word_list=english_words,
-    board=[
-        ['Qu', 'A', 'A', 'M', 'D'],
-        ['A', 'L', 'G', 'O', 'O'],
-        ['R', 'G', 'I', 'D', 'E'],
-        ['O', 'N', 'F', 'Y', 'R'],
-        ['R', 'E', 'L', 'L', 'S'],
-    ],
-)
+def main():
+    with io.open("/usr/share/dict/words", encoding='latin-1') as word_file:
+        english_words = set(word.strip() for word in word_file)
 
-print(len(found_words))
-# from pprint import pprint
-# pprint(sorted(list(found_words)))
+    available_tiles = [letter for letter in string.ascii_uppercase]
+    available_tiles.remove('Q')
+    available_tiles.append('Qu')
+
+    # A boggle board is an n * n square. Set n:
+    size = 15
+
+    board = []
+    for row in range(size):
+        board.append([random.choice(available_tiles) for i in xrange(size)])
+
+    found_words = list_words(
+        word_list=english_words,
+        board=board,
+    )
+
+    print(len(found_words))
+
+main()

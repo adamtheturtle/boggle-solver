@@ -10,7 +10,6 @@ from boggle.boggle import (
     tiles_available,
     get_tile_map,
     is_available_route,
-    is_valid_route,
     is_valid_word,
 )
 
@@ -234,9 +233,10 @@ class IsAvailableRouteTests(unittest.TestCase):
             )
         )
 
-    def test_invalid_route(self):
+    def test_repeated_tile(self):
         """
-        If only an invalid route is available, False is returned.
+        A route which uses the same tile multiple times is not valid, so if
+        this is the only available route, False is returned.
         """
         self.assertFalse(
             is_available_route(
@@ -311,28 +311,3 @@ class PositionsTouchingTests(unittest.TestCase):
         If tiles are not touching, positions_touching returns False.
         """
         self.assertFalse(positions_touching(first=(0, 0), second=(0, 2)))
-
-
-class IsValidRouteTests(unittest.TestCase):
-    """
-    Tests for `is_valid_route`.
-    """
-
-    def test_valid_route(self):
-        """
-        A route which includes no duplicates and is of the same length as the
-        given word is valid.
-        """
-        self.assertTrue(is_valid_route('abc', [(0, 0), (1, 0), (2, 0)]))
-
-    def test_duplicate_tiles(self):
-        """
-        A route which uses the same tile multiple times is not valid.
-        """
-        self.assertFalse(is_valid_route('abc', [(0, 0), (0, 0), (2, 0)]))
-
-    def test_mismatching_length(self):
-        """
-        A route which has a different length to the given word is not valid.
-        """
-        self.assertFalse(is_valid_route('abc', [(0, 0), (1, 0)]))
