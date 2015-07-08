@@ -19,8 +19,8 @@ def positions_touching(first, second):
         or diagonal.
     """
     return (
-        abs(first.column - second.column) <= 1 and
-        abs(first.row - second.row) <= 1)
+        abs(first.row - second.row) <= 1 and
+        abs(first.column - second.column) <= 1)
 
 
 def is_available_route(word, tile_map):
