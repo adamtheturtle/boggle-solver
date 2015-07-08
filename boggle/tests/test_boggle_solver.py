@@ -5,12 +5,202 @@ Tests for solving a game of Boggle.
 import unittest
 
 from boggle.boggle import (
-    get_positions,
     list_words,
     positions_touching,
+    tiles_available,
+    get_tile_map,
     is_available_route,
     is_valid_route,
+    is_valid_word,
 )
+
+
+class IsValidWord(unittest.TestCase):
+    """
+    Tests for `is_valid_word`.
+    """
+
+    def test_valid_word(self):
+        """
+        Words of at least three letters which have an available route are
+        valid.
+        """
+        self.assertTrue(
+            is_valid_word(
+                word='ABC',
+                tile_map=get_tile_map(
+                    board=[
+                        ['A', 'B', 'C'],
+                    ],
+                )
+            )
+        )
+
+    def test_short_word(self):
+        """
+        Words shorter than 3 letters are not valid.
+        """
+        self.assertFalse(
+            is_valid_word(
+                word='AB',
+                tile_map=get_tile_map(
+                    board=[
+                        ['A', 'B'],
+                    ],
+                )
+            )
+        )
+
+    def test_no_route(self):
+        """
+        Words without an available route are not valid.
+        """
+        self.assertFalse(
+            is_valid_word(
+                word='ABC',
+                tile_map=get_tile_map(
+                    board=[
+                        ['A', 'C', 'B'],
+                    ],
+                )
+            )
+        )
+
+    def test_q_u_together(self):
+        """
+        Q and u are on the same tile, so a word consisting of two tiles but
+        three letters is valid.
+        """
+        self.assertTrue(
+            is_valid_word(
+                word='QUA',
+                tile_map=get_tile_map(
+                    board=[
+                        ['Qu', 'A'],
+                    ],
+                ),
+            ),
+        )
+
+    def test_case_insensitive(self):
+        """
+        A word is valid regardless of case.
+        """
+        self.assertTrue(
+            is_valid_word(
+                word='AbC',
+                tile_map=get_tile_map(
+                    board=[
+                        ['A', 'B', 'C'],
+                    ],
+                ),
+            ),
+        )
+
+
+class GetTileMapTests(unittest.TestCase):
+    """
+    Tests for `get_tile_map`.
+    """
+
+    def test_tile_map(self):
+        """
+        Tiles are mapped to positions they appear in.
+        """
+        self.assertEqual(
+            {
+                'A': [(0, 0), (1, 0), (0, 1)],
+                'B': [(1, 1)],
+            },
+            get_tile_map(
+                board=[
+                    ['A', 'A'],
+                    ['A', 'B'],
+                ],
+            )
+        )
+
+    def test_lowercase(self):
+        """
+        Lowercase tiles are mapped to their uppercase counterparts.
+        """
+        self.assertEqual(
+            {
+                'A': [(0, 0)],
+            },
+            get_tile_map(
+                board=[
+                    ['a'],
+                ],
+            )
+        )
+
+    def test_qu_mapped_to_u(self):
+        """
+        "Qu" tiles are mapped to "Q".
+        """
+        self.assertEqual(
+            {
+                'Q': [(0, 0)],
+            },
+            get_tile_map(
+                board=[
+                    ['Qu'],
+                ],
+            )
+        )
+
+
+class TilesAvailableTests(unittest.TestCase):
+    """
+    Tests for `tiles_available`.
+    """
+
+    def test_tile_available(self):
+        """
+        True is returned if all there are enough available tiles of each type.
+        """
+        self.assertTrue(
+            tiles_available(
+                word='ABC',
+                tile_map=get_tile_map(
+                    board=[
+                        ['A', 'C', 'B'],
+                    ],
+                ),
+            )
+        )
+
+    def test_tile_unavailable(self):
+        """
+        False is returned if a tile is unavailable.
+        """
+        self.assertFalse(
+            tiles_available(
+                word='A',
+                tile_map=get_tile_map(
+                    board=[
+                        ['B'],
+                    ],
+                ),
+            )
+        )
+
+    def test_not_enough_tiles(self):
+        """
+        False is returned if there are fewer instances of a tile in the board
+        than the given word.
+        """
+        self.assertFalse(
+            tiles_available(
+                word='AA',
+                tile_map=get_tile_map(
+                    board=[
+                        ['A'],
+                    ],
+                ),
+            )
+        )
 
 
 class IsAvailableRouteTests(unittest.TestCase):
@@ -25,9 +215,9 @@ class IsAvailableRouteTests(unittest.TestCase):
         self.assertTrue(
             is_available_route(
                 word='ABC',
-                board=[
+                tile_map=get_tile_map([
                     ['A', 'B', 'C'],
-                ],
+                ]),
             )
         )
 
@@ -38,9 +228,9 @@ class IsAvailableRouteTests(unittest.TestCase):
         self.assertFalse(
             is_available_route(
                 word='ABC',
-                board=[
-                    ['D', 'E', 'F'],
-                ],
+                tile_map=get_tile_map([
+                    ['A', 'C', 'B'],
+                ]),
             )
         )
 
@@ -51,9 +241,9 @@ class IsAvailableRouteTests(unittest.TestCase):
         self.assertFalse(
             is_available_route(
                 word='ABA',
-                board=[
+                tile_map=get_tile_map([
                     ['A', 'B'],
-                ],
+                ]),
             )
         )
 
@@ -62,6 +252,7 @@ class ListWordsTests(unittest.TestCase):
     """
     Tests for `list_words`.
     """
+
     def test_list_words(self):
         """
         A set of available words is returned.
@@ -69,7 +260,7 @@ class ListWordsTests(unittest.TestCase):
         self.assertEqual(
             set(['ABC', 'DEF']),
             list_words(
-                dictionary=set(['ABC', 'DEF', 'GHI']),
+                word_list=set(['ABC', 'DEF', 'GHI']),
                 board=[
                     ['A', 'B', 'C'],
                     ['D', 'E', 'F'],
@@ -77,108 +268,17 @@ class ListWordsTests(unittest.TestCase):
             )
         )
 
-    def test_short_word_ignored(self):
+    def test_no_duplicates(self):
         """
-        Only words of 3 or more letters are returned.
-        """
-        self.assertEqual(
-            set(),
-            list_words(
-                dictionary=set(['AB']),
-                board=[
-                    ['A', 'B'],
-                ],
-            )
-        )
-
-    def test_q_u_together(self):
-        """
-        Q and u are on the same tile.
-        """
-        self.assertEqual(
-            set(['QUA']),
-            list_words(
-                dictionary=set(['QUA']),
-                board=[
-                    ['Qu', 'A'],
-                ],
-            )
-        )
-
-    def test_case_insensitive_dictionary(self):
-        """
-        Listing words is case insensitive to dictionary case.
+        Words which, ignoring case, are duplicated in the word list, are only
+        returned once.
         """
         self.assertEqual(
             set(['ABC']),
             list_words(
-                dictionary=set(['AbC']),
+                word_list=set(['ABC', 'abc']),
                 board=[
                     ['A', 'B', 'C'],
-                ],
-            )
-        )
-
-    def test_case_insensitive_board(self):
-        """
-        Listing words is case insensitive to board case.
-        """
-        self.assertEqual(
-            set(['ABC']),
-            list_words(
-                dictionary=set(['ABC']),
-                board=[
-                    ['A', 'B', 'c'],
-                ],
-            )
-        )
-
-
-class GetPositionsTests(unittest.TestCase):
-    """
-    Tests for get_positions.
-    """
-
-    def test_get_positions(self):
-        """
-        A list of position tuples
-        """
-        self.assertEqual(
-            [(0, 0), (2, 0), (0, 1)],
-            get_positions(
-                letter='A',
-                board=[
-                    ['A', 'X', 'A', 'X', 'X'],
-                    ['A', 'X', 'X', 'X', 'X'],
-                ],
-            )
-        )
-
-    def test_case_insensitive(self):
-        """
-        The case of the letter does not matter.
-        """
-        self.assertEqual(
-            [(0, 0), (0, 1)],
-            get_positions(
-                letter='a',
-                board=[
-                    ['a'],
-                    ['A'],
-                ],
-            )
-        )
-
-    def test_first_letter_only(self):
-        """
-        Only the first letter is compared. This is to handle the "Qu" tile.
-        """
-        self.assertEqual(
-            [(0, 0)],
-            get_positions(
-                letter='AB',
-                board=[
-                    ['AC'],
                 ],
             )
         )
