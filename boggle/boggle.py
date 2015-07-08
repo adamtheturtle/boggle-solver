@@ -56,7 +56,7 @@ def is_available_route(word, tile_map):
         if not new_routes:
             return False
 
-        routes = copy.copy(new_routes)
+        routes = new_routes
 
 
 def get_tile_map(board):
