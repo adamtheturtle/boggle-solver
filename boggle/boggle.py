@@ -28,9 +28,7 @@ def is_valid_route(word_length, route):
 
     return: Boolean, True iff a route is valid.
     """
-    no_duplicates = len(set(route)) == len(route)
-    includes_whole_word = len(route) == word_length
-    return no_duplicates and includes_whole_word
+    return len(route) == word_length
 
 
 def is_available_route(word, tile_map):
@@ -60,7 +58,8 @@ def is_available_route(word, tile_map):
 
             for route in routes:
                 for position in positions:
-                    if positions_touching(route[len(route) - 1], position):
+                    if (positions_touching(route[len(route) - 1], position) and
+                            position not in route):
                         new_route = copy.copy(route)
                         new_route.append(position)
                         if is_valid_route(word_length, new_route):
