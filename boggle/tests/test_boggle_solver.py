@@ -5,8 +5,8 @@ Tests for solving a game of Boggle.
 import unittest
 
 from boggle.boggle import (
+    Tile,
     list_words,
-    positions_touching,
     tiles_available,
     get_tile_map,
     is_available_route,
@@ -108,8 +108,14 @@ class GetTileMapTests(unittest.TestCase):
         """
         self.assertEqual(
             {
-                'A': [(0, 0), (1, 0), (0, 1)],
-                'B': [(1, 1)],
+                'A': [
+                    Tile(column=0, row=0),
+                    Tile(column=1, row=0),
+                    Tile(column=0, row=1),
+                ],
+                'B': [
+                    Tile(column=1, row=1),
+                ],
             },
             get_tile_map(
                 board=[
@@ -125,7 +131,9 @@ class GetTileMapTests(unittest.TestCase):
         """
         self.assertEqual(
             {
-                'A': [(0, 0)],
+                'A': [
+                    Tile(column=0, row=0),
+                ],
             },
             get_tile_map(
                 board=[
@@ -140,7 +148,9 @@ class GetTileMapTests(unittest.TestCase):
         """
         self.assertEqual(
             {
-                'Q': [(0, 0)],
+                'Q': [
+                    Tile(column=0, row=0),
+                ],
             },
             get_tile_map(
                 board=[
@@ -286,23 +296,24 @@ class ListWordsTests(unittest.TestCase):
 
 class PositionsTouchingTests(unittest.TestCase):
     """
-    Tests for `positions_touching`.
+    Tests for `Tile.positions_touching`.
     """
 
     def test_touching(self):
         """
         If tiles are touching, positions_touching returns True.
         """
+        tile = Tile(column=1, row=1)
         self.assertTrue(
             all([
                 # Second on right on first.
-                positions_touching(first=(1, 0), second=(0, 0)),
+                tile.touching(Tile(column=2, row=1)),
                 # Second on left of first.
-                positions_touching(first=(1, 0), second=(0, 0)),
+                tile.touching(Tile(column=0, row=1)),
                 # Second above first.
-                positions_touching(first=(0, 1), second=(0, 0)),
+                tile.touching(Tile(column=1, row=0)),
                 # Second below first.
-                positions_touching(first=(0, 0), second=(0, 1)),
+                tile.touching(Tile(column=1, row=2)),
                 ],
                 ))
 
@@ -310,4 +321,5 @@ class PositionsTouchingTests(unittest.TestCase):
         """
         If tiles are not touching, positions_touching returns False.
         """
-        self.assertFalse(positions_touching(first=(0, 0), second=(0, 2)))
+        tile = Tile(column=1, row=1)
+        self.assertFalse(tile.touching(Tile(column=3, row=3)))

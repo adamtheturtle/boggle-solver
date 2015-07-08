@@ -1,6 +1,7 @@
 # TODO add a way to input a board (text file / photo)
 
 
+# TODO put this in a separate file, and test separately
 class Tile(object):
 
     def __init__(self, column, row):
@@ -8,15 +9,17 @@ class Tile(object):
         self.row = row
         self.touching_map = {}
 
+    def __eq__(self, other):
+        return self.row == other.row and self.column == other.column
+
     def touching(self, other):
         """
-        Given two tile positions, check whether they are touching.
+        Given another, check whether it is touching this tile.
 
-        first: Tuple of co-ordinates of a tile.
-        second: Tuple of co-ordinates of a tile.
+        second: A Tile.
 
-        return: Bool, true iff the tiles are touching - immediately above, below
-            or diagonal.
+        return: Bool, true iff the tiles are touching - immediately above,
+            below or diagonal.
         """
         try:
             return self.touching_map[other]
