@@ -7,20 +7,19 @@ class Tile(object):
         self.column = column
         self.row = row
 
+    def touching(self, other):
+        """
+        Given two tile positions, check whether they are touching.
 
-def positions_touching(first, second):
-    """
-    Given two tile positions, check whether they are touching.
+        first: Tuple of co-ordinates of a tile.
+        second: Tuple of co-ordinates of a tile.
 
-    first: Tuple of co-ordinates of a tile.
-    second: Tuple of co-ordinates of a tile.
-
-    return: Bool, true iff the tiles are touching - immediately above, below
-        or diagonal.
-    """
-    return (
-        abs(first.row - second.row) <= 1 and
-        abs(first.column - second.column) <= 1)
+        return: Bool, true iff the tiles are touching - immediately above, below
+            or diagonal.
+        """
+        return (
+            abs(self.row - other.row) <= 1 and
+            abs(self.column - other.column) <= 1)
 
 
 def is_available_route(word, tile_map):
@@ -48,8 +47,7 @@ def is_available_route(word, tile_map):
             for position in positions:
                 # TODO do set comparison with tile map[letter] and touching
                 # positions of a position from a map
-                if (positions_touching(last_position, position) and
-                        position not in route):
+                if position.touching(last_position) and position not in route:
                     new_route = route[:]
                     new_route.append(position)
                     includes_whole_word = len(new_route) == word_length
