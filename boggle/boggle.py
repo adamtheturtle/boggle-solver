@@ -67,6 +67,9 @@ def is_available_route(word, tile_map):
                             return True
                         new_routes.append(new_route)
 
+            if not new_routes:
+                return False
+
             routes = copy.copy(new_routes)
 
     return False
