@@ -37,6 +37,7 @@ def is_available_route(word, tile_map):
         for route in routes:
             last_position = route[len(route) - 1]
             for position in positions:
+                # TODO do set comparison with tile map[letter] and touching positions of a position from a map
                 if (positions_touching(last_position, position) and
                         position not in route):
                     new_route = route[:]
