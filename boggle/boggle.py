@@ -35,8 +35,9 @@ def is_available_route(word, tile_map):
         new_routes = []
 
         for route in routes:
+            last_position = route[len(route) - 1]
             for position in positions:
-                if (positions_touching(route[len(route) - 1], position) and
+                if (positions_touching(last_position, position) and
                         position not in route):
                     new_route = route[:]
                     new_route.append(position)
