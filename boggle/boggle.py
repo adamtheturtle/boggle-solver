@@ -22,7 +22,15 @@ class Tile(object):
 
 
 def to_tiles(word):
-    word = word.replace('QU', 'Q')
+    """
+    Return the list of tile contents necessary to form a word.
+
+    A list of the letters in a string, except 'QU' is a tile and Q is not.
+
+    word: A string.
+    return: List of strings.
+    """
+    word = word.upper().replace('QU', 'Q')
     tiles = []
     for letter in word:
         if letter == 'Q':
@@ -30,6 +38,7 @@ def to_tiles(word):
         else:
             tiles.append(letter)
     return tiles
+
 
 def is_available_route(word, tile_map):
     """
@@ -45,7 +54,8 @@ def is_available_route(word, tile_map):
     """
     routes = []
 
-    word_length = len(word)
+    tiles = to_tiles(word)
+    word_length = len(tiles)
 
     for letter in to_tiles(word):
         positions = tile_map[letter]
@@ -79,18 +89,17 @@ def get_tile_map(board):
     board: A list of lists of tiles. Each list in the list of lists represents
         a row of a Boggle board.
 
-    return: Dictionary, each key representing a tile content (letter of
-        alphabet [not Q] or Qu)
+    return: Dictionary, each key representing a tile content.
     """
     mapping = {}
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
-            tile = to_tiles(board[row_index][column_index].upper())[0]
-            position = Tile(column=column_index, row=row_index)
+            key = board[row_index][column_index].upper()
+            tile = Tile(column=column_index, row=row_index)
             try:
-                mapping[tile].append(position)
+                mapping[key].append(tile)
             except KeyError:
-                mapping[tile] = [position]
+                mapping[key] = [tile]
     return mapping
 
 
@@ -123,8 +132,7 @@ def is_valid_word(word, tile_map):
 
     return: Boolean, True iff a word is valid.
     """
-    long_enough = len(word) > 2
-    return (long_enough and
+    return (len(word) > 2 and
             tiles_available(word=word, tile_map=tile_map) and
             is_available_route(word=word, tile_map=tile_map))
 

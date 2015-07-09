@@ -142,23 +142,6 @@ class GetTileMapTests(unittest.TestCase):
             )
         )
 
-    def test_qu_mapped_to_u(self):
-        """
-        "Qu" tiles are mapped to "Q".
-        """
-        self.assertEqual(
-            {
-                'Q': [
-                    Tile(column=0, row=0),
-                ],
-            },
-            get_tile_map(
-                board=[
-                    ['Qu'],
-                ],
-            )
-        )
-
 
 class TilesAvailableTests(unittest.TestCase):
     """
