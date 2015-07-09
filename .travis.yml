@@ -5,6 +5,8 @@ python:
   - "3.3"
   - "3.4"
   - "nightly"
+  - "pypy"
+  - "pypy3"
 install:
   - "pip install flake8 coveralls pyflakes"
 before_script:
