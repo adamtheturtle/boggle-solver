@@ -15,11 +15,11 @@ def main():
     available_tiles.append('Qu')
 
     # A boggle board is an n * n square. Set n:
-    size = 15
+    size = 10
 
     board = []
     for row in range(size):
-        board.append([random.choice(available_tiles) for i in xrange(size)])
+        board.append([random.choice(available_tiles) for i in range(size)])
 
     found_words = list_words(
         word_list=english_words,
