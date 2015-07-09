@@ -8,10 +8,12 @@ python:
   - "pypy"
   - "pypy3"
 install:
-  - "pip install flake8 coveralls pyflakes"
+  - "pip install flake8"
+  - "pip install coveralls"
+  - "pip install pyflakes"
 before_script:
-  - "flake8 boggle"
-  - "pyflakes boggle"
+  - "flake8 ."
+  - "pyflakes ."
 script:
   - "coverage run -m unittest discover"
 after_success:
