@@ -8,6 +8,7 @@ from boggle.boggle import (
     Tile,
     list_words,
     tiles_available,
+    to_tiles,
     get_tile_map,
     is_available_route,
     is_valid_word,
@@ -306,3 +307,18 @@ class PositionsTouchingTests(unittest.TestCase):
         """
         tile = Tile(column=1, row=1)
         self.assertFalse(tile.touching(Tile(column=3, row=3)))
+
+
+class ToTilesTests(unittest.TestCase):
+    """
+    Tests for `to_tiles`.
+    """
+
+    def test_to_tiles(self):
+        """
+        A list of letters is returned, except "QU" is a tile.
+        """
+        self.assertEqual(
+            to_tiles("ABQUC"),
+            ["A", "B", "QU", "C"],
+        )
