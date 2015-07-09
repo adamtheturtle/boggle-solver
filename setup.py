@@ -3,7 +3,8 @@
 from setuptools import setup, find_packages
 import os.path
 
-description = file(os.path.join(os.path.dirname(__file__), 'README.md'), 'rb').read()
+description = open(
+    os.path.join(os.path.dirname(__file__), 'README.md'), 'rb').read()
 
 
 setup(
@@ -16,7 +17,7 @@ setup(
     install_requires=[],
     zip_safe=True,
     packages=find_packages('.'),
-    classifiers = [
+    classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT Software License',
         'Operating System :: OS Independent',

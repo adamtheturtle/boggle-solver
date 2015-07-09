@@ -5,11 +5,13 @@ python:
   - "3.3"
   - "3.4"
   - "nightly"
+  - "pypy"
+  - "pypy3"
 install:
-  - "pip install flake8 coveralls pyflakes"
+  - "pip install flake8"
+  - "pip install coveralls"
 before_script:
-  - "flake8 boggle"
-  - "pyflakes boggle"
+  - "flake8 ."
 script:
   - "coverage run -m unittest discover"
 after_success:
