@@ -94,7 +94,7 @@ def get_tile_map(board):
     mapping = {}
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
-            key = board[row_index][column_index].upper()
+            key = piece.upper()
             tile = Tile(column=column_index, row=row_index)
             try:
                 mapping[key].append(tile)
