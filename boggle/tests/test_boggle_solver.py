@@ -82,21 +82,6 @@ class IsValidWord(unittest.TestCase):
             ),
         )
 
-    def test_case_insensitive(self):
-        """
-        A word is valid regardless of case.
-        """
-        self.assertTrue(
-            is_valid_word(
-                word='AbC',
-                tile_map=get_tile_map(
-                    board=[
-                        ['A', 'B', 'C'],
-                    ],
-                ),
-            ),
-        )
-
 
 class GetTileMapTests(unittest.TestCase):
     """
@@ -258,6 +243,20 @@ class ListWordsTests(unittest.TestCase):
                 board=[
                     ['A', 'B', 'C'],
                     ['D', 'E', 'F'],
+                ],
+            )
+        )
+
+    def test_case_insensitive(self):
+        """
+        A word is valid regardless of case.
+        """
+        self.assertEqual(
+            set(['ABC']),
+            list_words(
+                word_list=set(['abc']),
+                board=[
+                    ['A', 'B', 'C'],
                 ],
             )
         )

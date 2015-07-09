@@ -30,7 +30,7 @@ def to_tiles(word):
     word: A string.
     return: List of strings.
     """
-    word = word.upper().replace('QU', 'Q')
+    word = word.replace('QU', 'Q')
     tiles = []
     for letter in word:
         if letter == 'Q':
