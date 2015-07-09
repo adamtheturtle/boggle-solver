@@ -131,5 +131,5 @@ def list_words(board, word_list):
     returns: A set of strings.
     """
     tile_map = get_tile_map(board)
-    valid_words = filter(lambda word: is_valid_word(word, tile_map), word_list)
-    return set(map(lambda word: word.upper(), valid_words))
+    return set([word.upper() for word in word_list if
+                is_valid_word(word, tile_map)])
