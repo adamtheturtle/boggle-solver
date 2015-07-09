@@ -21,6 +21,16 @@ class Tile(object):
             abs(self.column - other.column) <= 1)
 
 
+def to_tiles(word):
+    word = word.replace('QU', 'Q')
+    tiles = []
+    for letter in word:
+        if letter == 'Q':
+            tiles.append('QU')
+        else:
+            tiles.append(letter)
+    return tiles
+
 def is_available_route(word, tile_map):
     """
     Check if there is an available route to make a word in a board.
@@ -37,7 +47,7 @@ def is_available_route(word, tile_map):
 
     word_length = len(word)
 
-    for letter in word:
+    for letter in to_tiles(word):
         positions = tile_map[letter]
         new_routes = []
 
@@ -75,7 +85,7 @@ def get_tile_map(board):
     mapping = {}
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
-            tile = board[row_index][column_index].upper().replace('QU', 'Q')
+            tile = to_tiles(board[row_index][column_index].upper())[0]
             position = Tile(column=column_index, row=row_index)
             try:
                 mapping[tile].append(position)
@@ -94,9 +104,9 @@ def tiles_available(word, tile_map):
 
     return: Boolean, True iff all tiles are available.
     """
-    for letter in word:
+    for tile in to_tiles(word):
         try:
-            if word.count(letter) > len(tile_map[letter]):
+            if word.count(tile) > len(tile_map[tile]):
                 return False
         except KeyError:
             return False
@@ -114,7 +124,6 @@ def is_valid_word(word, tile_map):
     return: Boolean, True iff a word is valid.
     """
     long_enough = len(word) > 2
-    word = word.replace('QU', 'Q')
     return (long_enough and
             tiles_available(word=word, tile_map=tile_map) and
             is_available_route(word=word, tile_map=tile_map))
