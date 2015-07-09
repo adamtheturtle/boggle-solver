@@ -114,7 +114,7 @@ def is_valid_word(word, tile_map):
     return: Boolean, True iff a word is valid.
     """
     long_enough = len(word) > 2
-    word = word.upper().replace('QU', 'Q')
+    word = word.replace('QU', 'Q')
     return (long_enough and
             tiles_available(word=word, tile_map=tile_map) and
             is_available_route(word=word, tile_map=tile_map))
