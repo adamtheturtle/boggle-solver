@@ -1,17 +1,24 @@
-# TODO add a way to input a board (text file / photo)
+class Tile(object):
 
+    def __init__(self, column, row):
+        self.column = column
+        self.row = row
 
-def positions_touching(first, second):
-    """
-    Given two tile positions, check whether they are touching.
+    def __eq__(self, other):
+        return self.row == other.row and self.column == other.column
 
-    first: Tuple of co-ordinates of a tile.
-    second: Tuple of co-ordinates of a tile.
+    def touching(self, other):
+        """
+        Given another, check whether it is touching this tile.
 
-    return: Bool, true iff the tiles are touching - immediately above, below
-        or diagonal.
-    """
-    return abs(first[0] - second[0]) <= 1 and abs(first[1] - second[1]) <= 1
+        second: A Tile.
+
+        return: Bool, true iff the tiles are touching - immediately above,
+            below or diagonal.
+        """
+        return(
+            abs(self.row - other.row) <= 1 and
+            abs(self.column - other.column) <= 1)
 
 
 def is_available_route(word, tile_map):
@@ -37,10 +44,7 @@ def is_available_route(word, tile_map):
         for route in routes:
             last_position = route[len(route) - 1]
             for position in positions:
-                # TODO do set comparison with tile map[letter] and touching
-                # positions of a position from a map
-                if (positions_touching(last_position, position) and
-                        position not in route):
+                if position.touching(last_position) and position not in route:
                     new_route = route[:]
                     new_route.append(position)
                     includes_whole_word = len(new_route) == word_length
@@ -72,7 +76,7 @@ def get_tile_map(board):
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
             tile = board[row_index][column_index].upper().replace('QU', 'Q')
-            position = (column_index, row_index)
+            position = Tile(column=column_index, row=row_index)
             try:
                 mapping[tile].append(position)
             except KeyError:
