@@ -8,6 +8,7 @@ from boggle.boggle import (
     Tile,
     list_words,
     tiles_available,
+    to_tiles,
     get_tile_map,
     is_available_route,
     is_valid_word,
@@ -81,21 +82,6 @@ class IsValidWord(unittest.TestCase):
             ),
         )
 
-    def test_case_insensitive(self):
-        """
-        A word is valid regardless of case.
-        """
-        self.assertTrue(
-            is_valid_word(
-                word='AbC',
-                tile_map=get_tile_map(
-                    board=[
-                        ['A', 'B', 'C'],
-                    ],
-                ),
-            ),
-        )
-
 
 class GetTileMapTests(unittest.TestCase):
     """
@@ -138,23 +124,6 @@ class GetTileMapTests(unittest.TestCase):
             get_tile_map(
                 board=[
                     ['a'],
-                ],
-            )
-        )
-
-    def test_qu_mapped_to_u(self):
-        """
-        "Qu" tiles are mapped to "Q".
-        """
-        self.assertEqual(
-            {
-                'Q': [
-                    Tile(column=0, row=0),
-                ],
-            },
-            get_tile_map(
-                board=[
-                    ['Qu'],
                 ],
             )
         )
@@ -278,6 +247,20 @@ class ListWordsTests(unittest.TestCase):
             )
         )
 
+    def test_case_insensitive(self):
+        """
+        A word is valid regardless of case.
+        """
+        self.assertEqual(
+            set(['ABC']),
+            list_words(
+                word_list=set(['abc']),
+                board=[
+                    ['A', 'B', 'C'],
+                ],
+            )
+        )
+
     def test_no_duplicates(self):
         """
         Words which, ignoring case, are duplicated in the word list, are only
@@ -323,3 +306,18 @@ class PositionsTouchingTests(unittest.TestCase):
         """
         tile = Tile(column=1, row=1)
         self.assertFalse(tile.touching(Tile(column=3, row=3)))
+
+
+class ToTilesTests(unittest.TestCase):
+    """
+    Tests for `to_tiles`.
+    """
+
+    def test_to_tiles(self):
+        """
+        A list of letters is returned, except "QU" is a tile.
+        """
+        self.assertEqual(
+            to_tiles("ABQUC"),
+            ["A", "B", "QU", "C"],
+        )

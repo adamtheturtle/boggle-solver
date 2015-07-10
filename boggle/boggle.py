@@ -21,6 +21,25 @@ class Tile(object):
             abs(self.column - other.column) <= 1)
 
 
+def to_tiles(word):
+    """
+    Return the list of tile contents necessary to form a word.
+
+    A list of the letters in a string, except 'QU' is a tile and Q is not.
+
+    word: A string.
+    return: List of strings.
+    """
+    word = word.replace('QU', 'Q')
+    tiles = []
+    for letter in word:
+        if letter == 'Q':
+            tiles.append('QU')
+        else:
+            tiles.append(letter)
+    return tiles
+
+
 def is_available_route(word, tile_map):
     """
     Check if there is an available route to make a word in a board.
@@ -35,9 +54,10 @@ def is_available_route(word, tile_map):
     """
     routes = []
 
-    word_length = len(word)
+    tiles = to_tiles(word)
+    word_length = len(tiles)
 
-    for letter in word:
+    for letter in to_tiles(word):
         positions = tile_map[letter]
         new_routes = []
 
@@ -69,18 +89,17 @@ def get_tile_map(board):
     board: A list of lists of tiles. Each list in the list of lists represents
         a row of a Boggle board.
 
-    return: Dictionary, each key representing a tile content (letter of
-        alphabet [not Q] or Qu)
+    return: Dictionary, each key representing a tile content.
     """
     mapping = {}
     for row_index, row in enumerate(board):
         for column_index, piece in enumerate(row):
-            tile = board[row_index][column_index].upper().replace('QU', 'Q')
-            position = Tile(column=column_index, row=row_index)
+            key = piece.upper()
+            tile = Tile(column=column_index, row=row_index)
             try:
-                mapping[tile].append(position)
+                mapping[key].append(tile)
             except KeyError:
-                mapping[tile] = [position]
+                mapping[key] = [tile]
     return mapping
 
 
@@ -94,9 +113,9 @@ def tiles_available(word, tile_map):
 
     return: Boolean, True iff all tiles are available.
     """
-    for letter in word:
+    for tile in to_tiles(word):
         try:
-            if word.count(letter) > len(tile_map[letter]):
+            if word.count(tile) > len(tile_map[tile]):
                 return False
         except KeyError:
             return False
@@ -113,9 +132,7 @@ def is_valid_word(word, tile_map):
 
     return: Boolean, True iff a word is valid.
     """
-    long_enough = len(word) > 2
-    word = word.upper().replace('QU', 'Q')
-    return (long_enough and
+    return (len(word) > 2 and
             tiles_available(word=word, tile_map=tile_map) and
             is_available_route(word=word, tile_map=tile_map))
 
@@ -131,5 +148,5 @@ def list_words(board, word_list):
     returns: A set of strings.
     """
     tile_map = get_tile_map(board)
-    return set([word.upper() for word in word_list if
-                is_valid_word(word, tile_map)])
+    word_list = set([word.upper() for word in word_list])
+    return set([word for word in word_list if is_valid_word(word, tile_map)])
