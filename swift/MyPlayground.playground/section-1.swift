@@ -14,7 +14,20 @@ class Tile {
 
 
 func toTiles(word: String) -> [String] {
-    return ["A", "B", "C"]
+    var result : [String] = []
+    for (index, character) in word.characters.enumerate() {
+        if index != 0 && character == "U" && Array(word.characters)[index - 1] == "Q" {
+            continue
+        } else {
+            if character == "Q" {
+                result.append("QU")
+            } else {
+                result.append(String(character))
+            }
+        }
+    }
+
+    return result
 }
 
 func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Bool {
@@ -103,9 +116,11 @@ let my_board : [[String]] = [
 
 let word_list : Set<String> = Set(arrayLiteral: "abc", "ab", "abd", "foo")
 
-listWords(my_board, word_list: word_list)
+//listWords(my_board, word_list: word_list)
 
 numOccurencesOfASubstring("abcabc", needle: "abc")
 numOccurencesOfASubstring("abcabc", needle: "abd")
 numOccurencesOfASubstring("abcabc", needle: "abca")
 numOccurencesOfASubstring("abcabc", needle: "ab")
+
+toTiles("UADAMQUA")
