@@ -26,13 +26,18 @@ func getTileMap(board: [[String]]) -> Dictionary<String, [Tile]> {
 
 
 func numOccurencesOfASubstring(haystack: String, needle: String) -> Int {
-    let character_array = Array(haystack.characters)
-    let world = character_array[2..<5]
+    let haystack_array = Array(haystack.characters)
+    let needle_array = Array(needle.characters)
+    var count = 0
+
     for (index, character) in haystack.characters.enumerate() {
-//        if haystack[advance(haystack.startIndex,6)..< advance(text.startIndex,countElements(text))]
-        print(character_array[1])
+        var substring_of_needle_length = Array(haystack_array[0..<needle_array.count])
+        var is_correct = substring_of_needle_length == needle_array
+        if is_correct {
+            count++
+        }
     }
-    return 1
+    return count
 }
 
 func tilesAvailable(word: String, tile_map: Dictionary<String, [Tile]>) -> Bool {
@@ -47,7 +52,7 @@ func tilesAvailable(word: String, tile_map: Dictionary<String, [Tile]>) -> Bool 
         let num_positions = positions?.count
         return occurences <= num_positions
     }
-    
+
     return true
 }
 
