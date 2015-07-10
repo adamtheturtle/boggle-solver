@@ -21,33 +21,46 @@ func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Boo
 }
 
 func getTileMap(board: [[String]]) -> Dictionary<String, [Tile]> {
-    return ["A": [Tile(column: 1, row: 1)]]
+    var mapping = Dictionary<String, [Tile]>()
+    for (row_index, row) in board.enumerate() {
+        for (column_index, piece) in row.enumerate() {
+            let key = piece.uppercaseString
+            let tile = Tile(column: column_index, row: row_index)
+            if (mapping[key]?.count != nil) {
+                mapping[key]?.append(tile)
+            } else {
+                mapping[key] = [tile]
+            }
+        }
+    }
+
+    return mapping
 }
 
 
 func numOccurencesOfASubstring(haystack: String, needle: String) -> Int {
     let haystack_array = Array(haystack.characters)
     let needle_array = Array(needle.characters)
-    var count = 0
+    var count : Int = 0
 
-    for (index, character) in haystack.characters.enumerate() {
-        var end_point = index + needle_array.count
+    for (index, _) in haystack.characters.enumerate() {
+        let end_point: Int = index + needle_array.count
         if end_point > haystack_array.count {
             return count
         }
-        var substring_of_needle_length = Array(haystack_array[index..<end_point])
-        var is_correct = substring_of_needle_length == needle_array
-        if is_correct {
+        let substring_of_needle_length = Array(haystack_array[index..<end_point])
+        if substring_of_needle_length == needle_array {
             count++
         }
     }
+
     return count
 }
 
 func tilesAvailable(word: String, tile_map: Dictionary<String, [Tile]>) -> Bool {
-    let tiles = toTiles(word)
+    let tiles : [String] = toTiles(word)
     for tile in tiles {
-        let occurences = numOccurencesOfASubstring(word, needle: tile)
+        let occurences : Int = numOccurencesOfASubstring(word, needle: tile)
         var positions = tile_map[tile]
         if positions == nil {
             return false
@@ -88,6 +101,9 @@ let my_board : [[String]] = [
 
 let word_list : Set<String> = Set(arrayLiteral: "abc", "ab", "abd", "foo")
 
-//listWords(my_board, word_list: word_list)
+listWords(my_board, word_list: word_list)
 
+numOccurencesOfASubstring("abcabc", needle: "abc")
+numOccurencesOfASubstring("abcabc", needle: "abd")
 numOccurencesOfASubstring("abcabc", needle: "abca")
+numOccurencesOfASubstring("abcabc", needle: "ab")
