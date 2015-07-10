@@ -6,7 +6,9 @@ class Tile {
     }
 
     func touching(other: Tile) -> Bool {
-        return true
+        let horizontally_adjacent = abs(self.column - other.column) <= 1
+        let vertically_adjacent = abs(self.row - other.row) <= 1
+        return horizontally_adjacent && vertically_adjacent
     }
 }
 
