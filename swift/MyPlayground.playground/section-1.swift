@@ -1,4 +1,4 @@
-class Tile {
+class Tile : Equatable {
     let column, row: Int
     init(column: Int, row: Int) {
         self.column = column
@@ -12,6 +12,9 @@ class Tile {
     }
 }
 
+func ==(lhs: Tile, rhs: Tile) -> Bool {
+    return lhs.column == rhs.column && lhs.row == rhs.row
+}
 
 func toTiles(word: String) -> [String] {
     var result : [String] = []
@@ -39,11 +42,11 @@ func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Boo
         var new_routes : [[Tile]] = []
 
         for route in routes {
+            // TODO is this necessary?
             if positions != nil {
                 for position in positions! {
                     if position.touching(route.last!) {
-                        // TODO if route does not contain position
-                        if true {
+                        if route.contains(position) {
                             var new_route : [Tile] = route
                             new_route.append(position)
                             let includes_whole_word = new_route.count == word_length
@@ -57,12 +60,13 @@ func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Boo
             }
         }
         
-        if routes.count == 0 {
+        if routes.isEmpty {
             for position in positions! {
-                
+                routes.append([position])
             }
             continue
         }
+
     }
 
     return true
