@@ -72,7 +72,7 @@ def is_available_route(word, tile_map):
                         return True
                     new_routes.append(new_route)
 
-        if not len(routes):
+        if not routes:
             routes = [[position] for position in positions]
             continue
 
