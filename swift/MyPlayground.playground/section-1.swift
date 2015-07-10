@@ -138,7 +138,8 @@ func isValidWord(word: String, tile_map: Dictionary<String, [Tile]>) -> Bool {
 func listWords(board: [[String]], word_list: Set<String>) -> Set<String> {
     let tile_map = getTileMap(board)
     var words = Set<String>()
-    for word in word_list {
+    for var word in word_list {
+        word = word.uppercaseString
         if isValidWord(word, tile_map: tile_map) {
             words.insert(word.uppercaseString)
         }
@@ -152,17 +153,4 @@ let my_board : [[String]] = [
     ["C", "D"],
 ]
 
-let word_list : Set<String> = Set(arrayLiteral: "abc", "ab", "abd", "foo")
-
-listWords(my_board, word_list: word_list)
-
-numOccurencesOfASubstring("abcabc", needle: "abc")
-numOccurencesOfASubstring("abcabc", needle: "abd")
-numOccurencesOfASubstring("abcabc", needle: "abca")
-numOccurencesOfASubstring("abcabc", needle: "ab")
-
-toTiles("UADAMQUA")
-var route = [Tile(column: 1, row: 1)]
-for i in route {
-    print(i)
-}
+let words = listWords(my_board, word_list: Set(["ABC", "cbd", "da"]))
