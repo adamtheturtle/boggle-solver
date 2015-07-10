@@ -31,7 +31,11 @@ func numOccurencesOfASubstring(haystack: String, needle: String) -> Int {
     var count = 0
 
     for (index, character) in haystack.characters.enumerate() {
-        var substring_of_needle_length = Array(haystack_array[0..<needle_array.count])
+        var end_point = index + needle_array.count
+        if end_point > haystack_array.count {
+            return count
+        }
+        var substring_of_needle_length = Array(haystack_array[index..<end_point])
         var is_correct = substring_of_needle_length == needle_array
         if is_correct {
             count++
@@ -86,4 +90,4 @@ let word_list : Set<String> = Set(arrayLiteral: "abc", "ab", "abd", "foo")
 
 //listWords(my_board, word_list: word_list)
 
-numOccurencesOfASubstring("abcabc", needle: "ab")
+numOccurencesOfASubstring("abcabc", needle: "abca")
