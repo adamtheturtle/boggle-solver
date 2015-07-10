@@ -31,6 +31,33 @@ func toTiles(word: String) -> [String] {
 }
 
 func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Bool {
+    var routes : [[Tile]] = []
+    let tiles = toTiles(word)
+    let word_length = word.characters.count
+    for letter in tiles {
+        let positions = tile_map[letter]
+        var new_routes : [[Tile]] = []
+
+//        for route in routes {
+//            let num_postions = positions?.count
+//            // TODO loop through positions
+//            var position = positions?.first
+//            var touching = position?.touching(route[-1])
+//            if touching == true {
+//                continue
+//            }
+//            if route.last?.touching(position) {
+////                TODO if not position in route
+//                route.contains(position)
+//                if true {
+//                    var new_route : [Tile] = route
+//                    
+//                }
+//            }
+//            
+//        }
+        
+    }
     return true
     
 }
@@ -116,7 +143,7 @@ let my_board : [[String]] = [
 
 let word_list : Set<String> = Set(arrayLiteral: "abc", "ab", "abd", "foo")
 
-//listWords(my_board, word_list: word_list)
+listWords(my_board, word_list: word_list)
 
 numOccurencesOfASubstring("abcabc", needle: "abc")
 numOccurencesOfASubstring("abcabc", needle: "abd")
@@ -124,3 +151,5 @@ numOccurencesOfASubstring("abcabc", needle: "abca")
 numOccurencesOfASubstring("abcabc", needle: "ab")
 
 toTiles("UADAMQUA")
+var route = ["A", "B"]
+route.last
