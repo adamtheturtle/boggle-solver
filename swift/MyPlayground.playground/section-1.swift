@@ -47,8 +47,7 @@ func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Boo
         for route in routes {
             for position in positions! {
                 if position.touching(route.last!) {
-                    // TODO it doesn't look like this exists
-                    if route.contains(position) {
+                    if !route.contains(position) {
                         var new_route : [Tile] = route
                         new_route.append(position)
                         let includes_whole_word = new_route.count == word_length
