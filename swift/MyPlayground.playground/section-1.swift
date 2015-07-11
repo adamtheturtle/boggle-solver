@@ -39,22 +39,22 @@ func toTiles(word: String) -> [String] {
 func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Bool {
     var routes : [[Tile]] = []
     let tiles = toTiles(word)
-    let word_length = word.characters.count
     for letter in tiles {
         let positions = tile_map[letter]
         var new_routes : [[Tile]] = []
 
         for route in routes {
-            for position in positions! {
-                if position.touching(route.last!) {
-                    if !route.contains(position) {
-                        var new_route : [Tile] = route
-                        new_route.append(position)
-                        let includes_whole_word = new_route.count == word_length
-                        if includes_whole_word {
-                            return true
+            if positions != nil {
+                for position in positions! {
+                    if position.touching(route.last!) {
+                        if !route.contains(position) {
+                            var new_route : [Tile] = route
+                            new_route.append(position)
+                            if new_route.count == tiles.count {
+                                return true
+                            }
+                            new_routes.append(new_route)
                         }
-                        new_routes.append(new_route)
                     }
                 }
             }
@@ -158,15 +158,23 @@ let my_board : [[ String]] = [
     ["C", "R"],
 ]
 
+let five_301_board = [
+    ["Qu", "A", "A", "M", "D"],
+    ["A", "L", "G", "O", "O"],
+    ["R", "G", "I", "D", "E"],
+    ["O", "N", "F", "Y", "R"],
+    ["R", "E", "L", "L", "S"],
+]
+
 import Foundation
-//var path = "/usr/share/dict/words"
-var path = "/usr/share/dict/small"
+var path = "/usr/share/dict/words"
+//var path = "/usr/share/dict/small"
 let fileManager = NSFileManager.defaultManager()
 let data:NSData = fileManager.contentsAtPath(path)!
 var strs = NSString(data: data, encoding: NSUTF8StringEncoding)
 var my_array = strs?.componentsSeparatedByString("\n")
-my_array!.count
 var set = Set(my_array!)
 
-var new_set = Set(["BAR"])
-var solution = listWords(my_board, word_list: new_set)
+//var new_set = Set(["BAR"])
+var solution = listWords(five_301_board, word_list: set)
+var len = solution.count
