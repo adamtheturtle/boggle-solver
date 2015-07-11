@@ -1,3 +1,6 @@
+// TODO tests
+// TODO specify more types
+
 class Tile : Equatable {
     let column, row: Int
     init(column: Int, row: Int) {
@@ -42,19 +45,17 @@ func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Boo
         var new_routes : [[Tile]] = []
 
         for route in routes {
-            // TODO is this necessary?
-            if positions != nil {
-                for position in positions! {
-                    if position.touching(route.last!) {
-                        if route.contains(position) {
-                            var new_route : [Tile] = route
-                            new_route.append(position)
-                            let includes_whole_word = new_route.count == word_length
-                            if includes_whole_word {
-                                return true
-                            }
-                            new_routes.append(new_route)
+            for position in positions! {
+                if position.touching(route.last!) {
+                    // TODO it doesn't look like this exists
+                    if route.contains(position) {
+                        var new_route : [Tile] = route
+                        new_route.append(position)
+                        let includes_whole_word = new_route.count == word_length
+                        if includes_whole_word {
+                            return true
                         }
+                        new_routes.append(new_route)
                     }
                 }
             }
@@ -67,9 +68,14 @@ func isAvailableRoute(word: String, tile_map: Dictionary<String, [Tile]>) -> Boo
             continue
         }
 
+        if new_routes.isEmpty {
+            return false
+        }
+
+        routes = new_routes
     }
 
-    return true
+    return false
     
 }
 
@@ -148,9 +154,20 @@ func listWords(board: [[String]], word_list: Set<String>) -> Set<String> {
     return words
 }
 
-let my_board : [[String]] = [
-    ["A", "B"],
-    ["C", "D"],
+let my_board : [[ String]] = [
+    ["B", "A"],
+    ["C", "R"],
 ]
 
-let words = listWords(my_board, word_list: Set(["ABC", "cbd", "da"]))
+import Foundation
+//var path = "/usr/share/dict/words"
+var path = "/usr/share/dict/small"
+let fileManager = NSFileManager.defaultManager()
+let data:NSData = fileManager.contentsAtPath(path)!
+var strs = NSString(data: data, encoding: NSUTF8StringEncoding)
+var my_array = strs?.componentsSeparatedByString("\n")
+my_array!.count
+var set = Set(my_array!)
+
+var new_set = Set(["BAR"])
+var solution = listWords(my_board, word_list: new_set)
