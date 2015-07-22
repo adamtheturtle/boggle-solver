@@ -21,23 +21,32 @@ class Tile(object):
             abs(self.column - other.column) <= 1)
 
 
-def to_tiles(word):
+class Word(object):
     """
-    Return the list of tile contents necessary to form a word.
-
-    A list of the letters in a string, except 'QU' is a tile and Q is not.
-
-    word: A string.
-    return: List of strings.
     """
-    word = word.replace('QU', 'Q')
-    tiles = []
-    for letter in word:
-        if letter == 'Q':
-            tiles.append('QU')
-        else:
-            tiles.append(letter)
-    return tiles
+
+    def __init__(self, word):
+        """docstring for __init__"""
+        self.tiles = self.to_tiles(word)
+
+
+    def to_tiles(self, word):
+        """
+        Return the list of tile contents necessary to form a word.
+
+        A list of the letters in a string, except 'QU' is a tile and Q is not.
+
+        word: A string.
+        return: List of strings.
+        """
+        word = word.replace('QU', 'Q')
+        tiles = []
+        for letter in word:
+            if letter == 'Q':
+                tiles.append('QU')
+            else:
+                tiles.append(letter)
+        return tiles
 
 
 def is_available_route(word, tile_map):
@@ -52,13 +61,14 @@ def is_available_route(word, tile_map):
 
     returns: Boolean, True iff there is a valid route.
     """
+    word = Word(word=word)
     routes = []
 
-    tiles = to_tiles(word)
-    word_length = len(tiles)
+    tiles = word.tiles
+    num_tiles = len(tiles)
 
-    for letter in to_tiles(word):
-        positions = tile_map[letter]
+    for tile in tiles:
+        positions = tile_map[tile]
         new_routes = []
 
         for route in routes:
@@ -67,7 +77,7 @@ def is_available_route(word, tile_map):
                 if position.touching(last_position) and position not in route:
                     new_route = route[:]
                     new_route.append(position)
-                    includes_whole_word = len(new_route) == word_length
+                    includes_whole_word = len(new_route) == num_tiles
                     if includes_whole_word:
                         return True
                     new_routes.append(new_route)
@@ -113,7 +123,7 @@ def tiles_available(word, tile_map):
 
     return: Boolean, True iff all tiles are available.
     """
-    for tile in to_tiles(word):
+    for tile in Word(word=word).tiles:
         try:
             if word.count(tile) > len(tile_map[tile]):
                 return False
