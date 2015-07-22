@@ -1,3 +1,8 @@
+VALID_TILES = [
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'QU', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z',
+]
+
 class Tile(object):
 
     def __init__(self, column, row):
@@ -36,11 +41,10 @@ class Word(object):
     def __init__(self, word):
         """docstring for __init__"""
         self.word = word.upper()
-        self.length = len(self.word)
-        self.tiles = self.to_tiles(self.word)
+        self.long_enough = len(self.word) > 2
+        self.tile_list = self._to_tiles()
 
-
-    def to_tiles(self, word):
+    def _to_tiles(self):
         """
         Return the list of tile contents necessary to form a word.
 
@@ -49,7 +53,7 @@ class Word(object):
         word: A string.
         return: List of strings.
         """
-        word = word.replace('QU', 'Q')
+        word = self.word.replace('QU', 'Q')
         tiles = []
         for letter in word:
             if letter == 'Q':
@@ -57,6 +61,12 @@ class Word(object):
             else:
                 tiles.append(letter)
         return tiles
+
+    def num_occurences(self, tile):
+        return self.tile_list.count(tile)
+
+    def num_tiles(self):
+        return len(self.tile_list)
 
 
 class Board(object):
@@ -111,8 +121,8 @@ def is_available_route(word, board):
     """
     routes = []
 
-    tiles = word.tiles
-    num_tiles = len(tiles)
+    tiles = word.tile_list
+    num_tiles = word.num_tiles()
 
     for tile in tiles:
         positions = board.occurences(tile)
@@ -149,25 +159,10 @@ def tiles_available(word, board):
 
     return: Boolean, True iff all tiles are available.
     """
-    for tile in word.tiles:
-        if word.tiles.count(tile) > len(board.occurences(tile)):
+    for tile in word.tile_list:
+        if word.num_occurences(tile) > len(board.occurences(tile)):
             return False
     return True
-
-
-def is_valid_word(word, board):
-    """
-    Return whether a word is valid and can be found on a board.
-
-    word: A string.
-    tile_map: A mapping of tiles available in a Boggle board to positions on
-        that board.
-
-    return: Boolean, True iff a word is valid.
-    """
-    return (word.length > 2 and
-            tiles_available(word=word, board=board) and
-            is_available_route(word=word, board=board))
 
 
 def list_words(board, word_list):
@@ -181,5 +176,11 @@ def list_words(board, word_list):
     returns: A set of strings.
     """
     board = Board(rows=board)
-    return set([word.upper() for word in word_list if
-               is_valid_word(Word(word=word), board)])
+    found = set([])
+    for word in word_list:
+        word = Word(word=word)
+        if (word.long_enough and
+            tiles_available(word=word, board=board) and
+            is_available_route(word=word, board=board)):
+            found.add(word.word)
+    return found
