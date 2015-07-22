@@ -63,9 +63,9 @@ class Board(object):
 
     def __init__(self, rows):
         """docstring for __init__"""
-        self.tile_map = self.get_tile_map(rows)
+        self.tile_map = self._get_tile_map(rows)
 
-    def get_tile_map(self, board):
+    def _get_tile_map(self, board):
         """
         Get a mapping of tiles to positions.
 
