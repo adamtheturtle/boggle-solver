@@ -1,8 +1,3 @@
-VALID_TILES = [
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-    'P', 'QU', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z',
-]
-
 class Tile(object):
 
     def __init__(self, column, row):
@@ -43,6 +38,7 @@ class Word(object):
         self.word = word.upper()
         self.long_enough = len(self.word) > 2
         self.tile_list = self._to_tiles()
+        self.num_tiles = len(self.tile_list)
 
     def _to_tiles(self):
         """
@@ -64,9 +60,6 @@ class Word(object):
 
     def num_occurences(self, tile):
         return self.tile_list.count(tile)
-
-    def num_tiles(self):
-        return len(self.tile_list)
 
 
 class Board(object):
@@ -121,10 +114,7 @@ def is_available_route(word, board):
     """
     routes = []
 
-    tiles = word.tile_list
-    num_tiles = word.num_tiles()
-
-    for tile in tiles:
+    for tile in word.tile_list:
         positions = board.occurences(tile)
         new_routes = []
 
@@ -134,7 +124,7 @@ def is_available_route(word, board):
                 if position.touching(last_position) and position not in route:
                     new_route = route[:]
                     new_route.append(position)
-                    includes_whole_word = len(new_route) == num_tiles
+                    includes_whole_word = len(new_route) == word.num_tiles
                     if includes_whole_word:
                         return True
                     new_routes.append(new_route)
