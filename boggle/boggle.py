@@ -27,8 +27,9 @@ class Word(object):
 
     def __init__(self, word):
         """docstring for __init__"""
-        self.length = len(word)
-        self.tiles = self.to_tiles(word)
+        self.word = word.upper()
+        self.length = len(self.word)
+        self.tiles = self.to_tiles(self.word)
 
 
     def to_tiles(self, word):
@@ -49,6 +50,12 @@ class Word(object):
                 tiles.append(letter)
         return tiles
 
+
+class Board(object):
+
+    def __init__(self):
+        """docstring for __init__"""
+        pass
 
 def is_available_route(word, tile_map):
     """
@@ -158,5 +165,4 @@ def list_words(board, word_list):
     returns: A set of strings.
     """
     tile_map = get_tile_map(board)
-    word_list = set([word.upper() for word in word_list])
-    return set([word for word in word_list if is_valid_word(Word(word=word), tile_map)])
+    return set([word.upper() for word in word_list if is_valid_word(Word(word=word), tile_map)])
