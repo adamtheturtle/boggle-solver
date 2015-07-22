@@ -1,10 +1,18 @@
 class Tile(object):
 
     def __init__(self, column, row):
+        """
+        # TODO doc
+        """
         self.column = column
         self.row = row
 
     def __eq__(self, other):
+        """
+        Tiles are equal iff they are in the same position.
+
+        # TODO doc other
+        """
         return self.row == other.row and self.column == other.column
 
     def touching(self, other):
@@ -53,11 +61,43 @@ class Word(object):
 
 class Board(object):
 
-    def __init__(self):
+    def __init__(self, rows):
         """docstring for __init__"""
-        pass
+        self.tile_map = self.get_tile_map(rows)
 
-def is_available_route(word, tile_map):
+    def get_tile_map(self, board):
+        """
+        Get a mapping of tiles to positions.
+
+        board: A list of lists of tiles. Each list in the list of lists represents
+            a row of a Boggle board.
+
+        return: Dictionary, each key representing a tile content.
+        """
+        mapping = {}
+        for row_index, row in enumerate(board):
+            for column_index, piece in enumerate(row):
+                # TODO handle case where a key is not valid
+                key = piece.upper()
+                tile = Tile(column=column_index, row=row_index)
+                try:
+                    mapping[key].append(tile)
+                except KeyError:
+                    mapping[key] = [tile]
+        return mapping
+
+    def occurences(self, tile):
+        """
+        TODO
+
+        returns set of tiles
+        """
+        if tile in self.tile_map:
+            return self.tile_map[tile]
+
+        return set([])
+
+def is_available_route(word, board):
     """
     Check if there is an available route to make a word in a board.
 
@@ -75,7 +115,7 @@ def is_available_route(word, tile_map):
     num_tiles = len(tiles)
 
     for tile in tiles:
-        positions = tile_map[tile]
+        positions = board.occurences(tile)
         new_routes = []
 
         for route in routes:
@@ -99,28 +139,7 @@ def is_available_route(word, tile_map):
         routes = new_routes
 
 
-def get_tile_map(board):
-    """
-    Get a mapping of tiles to positions.
-
-    board: A list of lists of tiles. Each list in the list of lists represents
-        a row of a Boggle board.
-
-    return: Dictionary, each key representing a tile content.
-    """
-    mapping = {}
-    for row_index, row in enumerate(board):
-        for column_index, piece in enumerate(row):
-            key = piece.upper()
-            tile = Tile(column=column_index, row=row_index)
-            try:
-                mapping[key].append(tile)
-            except KeyError:
-                mapping[key] = [tile]
-    return mapping
-
-
-def tiles_available(word, tile_map):
+def tiles_available(word, board):
     """
     Check if there are enough of each required tile to make a word.
 
@@ -131,15 +150,12 @@ def tiles_available(word, tile_map):
     return: Boolean, True iff all tiles are available.
     """
     for tile in word.tiles:
-        try:
-            if word.tiles.count(tile) > len(tile_map[tile]):
-                return False
-        except KeyError:
+        if word.tiles.count(tile) > len(board.occurences(tile)):
             return False
     return True
 
 
-def is_valid_word(word, tile_map):
+def is_valid_word(word, board):
     """
     Return whether a word is valid and can be found on a board.
 
@@ -150,8 +166,8 @@ def is_valid_word(word, tile_map):
     return: Boolean, True iff a word is valid.
     """
     return (word.length > 2 and
-            tiles_available(word=word, tile_map=tile_map) and
-            is_available_route(word=word, tile_map=tile_map))
+            tiles_available(word=word, board=board) and
+            is_available_route(word=word, board=board))
 
 
 def list_words(board, word_list):
@@ -164,5 +180,6 @@ def list_words(board, word_list):
 
     returns: A set of strings.
     """
-    tile_map = get_tile_map(board)
-    return set([word.upper() for word in word_list if is_valid_word(Word(word=word), tile_map)])
+    board = Board(rows=board)
+    return set([word.upper() for word in word_list if
+               is_valid_word(Word(word=word), board)])
