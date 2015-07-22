@@ -27,6 +27,7 @@ class Word(object):
 
     def __init__(self, word):
         """docstring for __init__"""
+        self.length = len(word)
         self.tiles = self.to_tiles(word)
 
 
@@ -61,7 +62,6 @@ def is_available_route(word, tile_map):
 
     returns: Boolean, True iff there is a valid route.
     """
-    word = Word(word=word)
     routes = []
 
     tiles = word.tiles
@@ -123,9 +123,9 @@ def tiles_available(word, tile_map):
 
     return: Boolean, True iff all tiles are available.
     """
-    for tile in Word(word=word).tiles:
+    for tile in word.tiles:
         try:
-            if word.count(tile) > len(tile_map[tile]):
+            if word.tiles.count(tile) > len(tile_map[tile]):
                 return False
         except KeyError:
             return False
@@ -142,7 +142,7 @@ def is_valid_word(word, tile_map):
 
     return: Boolean, True iff a word is valid.
     """
-    return (len(word) > 2 and
+    return (word.length > 2 and
             tiles_available(word=word, tile_map=tile_map) and
             is_available_route(word=word, tile_map=tile_map))
 
@@ -159,4 +159,4 @@ def list_words(board, word_list):
     """
     tile_map = get_tile_map(board)
     word_list = set([word.upper() for word in word_list])
-    return set([word for word in word_list if is_valid_word(word, tile_map)])
+    return set([word for word in word_list if is_valid_word(Word(word=word), tile_map)])
