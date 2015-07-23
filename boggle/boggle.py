@@ -10,6 +10,9 @@
 # TODO try hypothesis for making a word - can it be broken?
 # TODO rename word_list as dictionary
 
+import io
+
+
 class Position(object):
     """
     The position of a tile on a Boggle board.
@@ -155,13 +158,13 @@ class Boggle(object):
         'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ])
 
-    def __init__(self, board, word_list):
+    def __init__(self, board, valid_words):
         """
         :param Board board: The board to play the game on.
-        :param list word_list: A list of words valid in the game.
+        :param set valid_words: Words valid in the game.
         """
         self.board = board
-        self.word_list = word_list
+        self.valid_words = valid_words
 
     def _matching_words(self):
         """
@@ -169,7 +172,7 @@ class Boggle(object):
             found.
         """
         found = set([])
-        for string in self.word_list:
+        for string in self.valid_words:
             word = Word(string=string, valid_tiles=self.valid_tiles)
             if len(string) > 2 and self.board.is_available_route(word=word):
                 found.add(word)
@@ -183,7 +186,24 @@ class Boggle(object):
         return set(["".join(word.get_tiles()) for word in matching_words])
 
 
-def list_words(board, word_list):
+class Dictionary(object):
+
+    def __init__(self, path=None):
+        """
+        TODO
+        """
+        if path is None:
+            path = "/usr/share/dict/words"
+
+        with io.open(path, encoding='latin-1') as word_file:
+            self._words = set(word.strip() for word in word_file)
+
+    def get_words(self):
+        return self._words
+
+
+def list_words(board, dictionary_path=None):
     board = Board(rows=board)
-    boggle = Boggle(board=board, word_list=word_list)
+    dictionary = Dictionary()
+    boggle = Boggle(board=board, valid_words=dictionary.get_words())
     return boggle.list_words()

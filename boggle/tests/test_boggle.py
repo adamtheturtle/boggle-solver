@@ -22,7 +22,7 @@ class BoggleTests(unittest.TestCase):
         ])
 
         self.assertEqual(
-            Boggle(board=board, word_list=[]).valid_tiles,
+            Boggle(board=board, valid_words=[]).valid_tiles,
             set([
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
                 'M', 'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
@@ -38,9 +38,9 @@ class BoggleTests(unittest.TestCase):
             ['A', 'B', 'C'],
             ['D', 'E', 'F'],
         ])
-        word_list = set(['ABC', 'DEF', 'GHI'])
+        valid_words = set(['ABC', 'DEF', 'GHI'])
         self.assertEqual(
-            Boggle(board=board, word_list=word_list).list_words(),
+            Boggle(board=board, valid_words=valid_words).list_words(),
             set(['ABC', 'DEF']),
         )
 
@@ -51,9 +51,9 @@ class BoggleTests(unittest.TestCase):
         board = Board(rows=[
             ['A', 'B', 'C'],
         ])
-        word_list = set(['AB'])
+        valid_words = set(['AB'])
         self.assertEqual(
-            Boggle(board=board, word_list=word_list).list_words(),
+            Boggle(board=board, valid_words=valid_words).list_words(),
             set([]),
         )
 
@@ -64,8 +64,8 @@ class BoggleTests(unittest.TestCase):
         board = Board(rows=[
             ['A', 'B', 'C'],
         ])
-        word_list = set(['ACB'])
+        valid_words = set(['ACB'])
         self.assertEqual(
-            Boggle(board=board, word_list=word_list).list_words(),
+            Boggle(board=board, valid_words=valid_words).list_words(),
             set([]),
         )
