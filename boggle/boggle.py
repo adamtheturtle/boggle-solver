@@ -1,8 +1,12 @@
 class Position(object):
-
+    """
+    The position of a tile on a Boggle board.
+    """
+    # TODO generate api docs
     def __init__(self, column, row):
         """
-        # TODO doc
+        :param int column: Column of the tile.
+        :param int row: Row of the tile.
         """
         self.column = column
         self.row = row
@@ -81,12 +85,12 @@ class Board(object):
         for row_index, row in enumerate(board):
             for column_index, piece in enumerate(row):
                 # TODO handle case where a key is not valid
-                key = piece.upper()
-                tile = Position(column=column_index, row=row_index)
-                try:
-                    mapping[key].append(tile)
-                except KeyError:
-                    mapping[key] = [tile]
+                tile = piece.upper()
+                position = Position(column=column_index, row=row_index)
+                if tile in mapping:
+                    mapping[tile].append(position)
+                else:
+                    mapping[tile] = [position]
         return mapping
 
     def _occurences(self, tile):
@@ -112,10 +116,10 @@ class Board(object):
 
         returns: Boolean, True iff there is a valid route.
         """
-        routes = []
-
         if not self._tiles_available:
             return False
+
+        routes = []
 
         for tile in word.tile_list:
             positions = self._occurences(tile)
