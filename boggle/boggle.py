@@ -84,30 +84,16 @@ class Board(object):
     def __init__(self, rows):
         """
         :param list rows: Lists of tiles. Each tile is a string.
-
-        :ivar dict tile_map: Mapping of tile contents to a list of
-            ``Position``s they appear at.
         """
-        self.tile_map = self._get_tile_map(rows)
-
-    def _get_tile_map(self, rows):
-        """
-        Get a mapping of tiles to positions.
-
-        :param list rows: Lists of tiles. Each tile is a string.
-
-        :return dict: Mapping of tile contents to ``Position``s they appear at.
-        """
-        mapping = {}
+        self._tile_map = {}
         for row_index, row in enumerate(rows):
             for column_index, tile in enumerate(row):
                 # TODO get the case matching piece here
                 position = Position(column=column_index, row=row_index)
-                if tile in mapping:
-                    mapping[tile].append(position)
+                if tile in self._tile_map:
+                    self._tile_map[tile].add(position)
                 else:
-                    mapping[tile] = [position]
-        return mapping
+                    self._tile_map[tile] = set([position])
 
     def is_available_route(self, word):
         """
@@ -123,10 +109,10 @@ class Board(object):
         routes = []
 
         for tile in word.tiles:
-            if tile not in self.tile_map:
+            if tile not in self._tile_map:
                 return False
 
-            positions = self.tile_map[tile]
+            positions = self._tile_map[tile]
             new_routes = []
 
             if not routes:
