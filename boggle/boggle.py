@@ -42,9 +42,9 @@ class Word(object):
     def __init__(self, word):
         """docstring for __init__"""
         self.word = word.upper()
-        self.long_enough = len(self.word) > 2
         self.tile_list = self._to_tiles()
         self.num_tiles = len(self.tile_list)
+        self.is_valid = len(self.word) > 2 and self.num_tiles
 
     def _to_tiles(self):
         """
@@ -55,13 +55,23 @@ class Word(object):
         word: A string.
         return: List of strings.
         """
-        word = self.word.replace('QU', 'Q')
+        valid_tiles = [
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'QU', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        ]
+
+        word = self.word
         tiles = []
-        for letter in word:
-            if letter == 'Q':
-                tiles.append('QU')
-            else:
-                tiles.append(letter)
+        while len(word):
+            valid_tile_added = False
+            for tile in valid_tiles:
+                if word.startswith(tile):
+                    word = word[len(tile):]
+                    tiles.append(tile)
+                    valid_tile_added = True
+                    continue
+            if not valid_tile_added:
+                return []
         return tiles
 
     def num_occurences(self, tile):
@@ -69,6 +79,8 @@ class Word(object):
 
 
 class Board(object):
+
+    # TODO Also include a generator
 
     def __init__(self, rows):
         """docstring for __init__"""
@@ -192,7 +204,7 @@ class Game(object):
         found = set([])
         for word in self.word_list:
             word = Word(word=word)
-            if word.long_enough and self.board.is_available_route(word=word):
+            if word.is_valid and self.board.is_available_route(word=word):
                 found.add(word)
         return found
 
