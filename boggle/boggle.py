@@ -6,10 +6,12 @@
 # languages
 # TODO Also include a generator, to make random games
 
+
 class Position(object):
     """
     The position of a tile on a Boggle board.
     """
+
     def __init__(self, column, row):
         """
         :param int column: Column of the tile.
@@ -53,7 +55,6 @@ class Word(object):
     def __init__(self, word):
         """docstring for __init__"""
         self.word = word.upper()
-        self.is_valid = len(self.word) > 2
 
     def to_tiles(self):
         """
@@ -162,7 +163,6 @@ class Board(object):
             if not routes:
                 return False
 
-
     def _tiles_available(self, word):
         """
         Check if there are enough of each required tile to make a word.
@@ -201,16 +201,15 @@ class Game(object):
         returns: A set of strings.
         """
         found = set([])
-        for word in self.word_list:
-            word = Word(word=word)
-            if word.is_valid and self.board.is_available_route(word=word):
+        for item in self.word_list:
+            word = Word(word=item)
+            if len(item) > 2 and self.board.is_available_route(word=word):
                 found.add(word)
         return found
 
     def list_words(self):
         matching_words = self._matching_words()
         return set([word.word for word in matching_words])
-
 
 
 def list_words(board, word_list):
