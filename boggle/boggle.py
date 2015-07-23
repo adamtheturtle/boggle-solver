@@ -114,6 +114,9 @@ class Board(object):
         """
         routes = []
 
+        if not self._tiles_available:
+            return False
+
         for tile in word.tile_list:
             positions = self.occurences(tile)
             new_routes = []
@@ -139,21 +142,20 @@ class Board(object):
                 return False
 
 
+    def _tiles_available(self, word):
+        """
+        Check if there are enough of each required tile to make a word.
 
-def tiles_available(word, board):
-    """
-    Check if there are enough of each required tile to make a word.
+        word: A string.
+        tile_map: A mapping of tiles available in a Boggle board to positions on
+            that board.
 
-    word: A string.
-    tile_map: A mapping of tiles available in a Boggle board to positions on
-        that board.
-
-    return: Boolean, True iff all tiles are available.
-    """
-    for tile in word.tile_list:
-        if word.num_occurences(tile) > len(board.occurences(tile)):
-            return False
-    return True
+        return: Boolean, True iff all tiles are available.
+        """
+        for tile in word.tile_list:
+            if word.num_occurences(tile) > len(self.occurences(tile)):
+                return False
+        return True
 
 
 def list_words(board, word_list):
@@ -170,8 +172,6 @@ def list_words(board, word_list):
     found = set([])
     for word in word_list:
         word = Word(word=word)
-        if (word.long_enough and
-            tiles_available(word=word, board=board) and
-            board.is_available_route(word=word)):
+        if word.long_enough and board.is_available_route(word=word):
             found.add(word.word)
     return found
