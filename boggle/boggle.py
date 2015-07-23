@@ -136,7 +136,7 @@ class Board(object):
                         new_routes.append(new_route)
 
             if not routes:
-                routes = routes or [[position] for position in positions]
+                routes = [[position] for position in positions]
                 continue
 
             routes = new_routes
