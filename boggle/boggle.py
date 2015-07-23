@@ -69,7 +69,7 @@ class Word(object):
                     valid_tile_added = True
                     continue
             if not valid_tile_added:
-                self.tiles = None
+                self.tiles = []
                 break
 
 
@@ -125,16 +125,9 @@ class Board(object):
 
         returns: Boolean, True iff there is a valid route.
         """
-        if not self._tiles_available:
-            return False
-
         routes = []
 
         tiles = word.tiles
-
-        if not tiles:
-            return False
-
         num_tiles = len(tiles)
 
         for tile in tiles:
@@ -160,21 +153,6 @@ class Board(object):
 
             if not routes:
                 return False
-
-    def _tiles_available(self, word):
-        """
-        Check if there are enough of each required tile to make a word.
-
-        word: A string.
-        tile_map: A mapping of tiles available in a Boggle board to positions on
-            that board.
-
-        return: Boolean, True iff all tiles are available.
-        """
-        for tile in word.tile_list:
-            if word.num_occurences(tile) > len(self._occurences(tile)):
-                return False
-        return True
 
 
 class Boggle(object):
