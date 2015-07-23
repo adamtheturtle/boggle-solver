@@ -21,10 +21,10 @@ class GetWordsTests(unittest.TestCase):
         """
         file, path = mkstemp()
         with io.open(path, mode='w') as file:
-            file.write(dedent(u"""\
+            file.write(dedent(str("""\
             ABC
              DEF
-            GHI  """))
+            GHI  """)))
 
         self.assertEqual(
             Dictionary(path=path).get_words(),
