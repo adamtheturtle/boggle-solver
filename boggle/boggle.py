@@ -47,11 +47,9 @@ class Word(object):
     def __init__(self, word):
         """docstring for __init__"""
         self.word = word.upper()
-        self.tile_list = self._to_tiles()
-        self.num_tiles = len(self.tile_list)
-        self.is_valid = len(self.word) > 2 and self.num_tiles
+        self.is_valid = len(self.word) > 2
 
-    def _to_tiles(self):
+    def to_tiles(self):
         """
         Return the list of tile contents necessary to form a word.
 
@@ -73,9 +71,6 @@ class Word(object):
             if not valid_tile_added:
                 return []
         return tiles
-
-    def num_occurences(self, tile):
-        return self.tile_list.count(tile)
 
 
 class Board(object):
@@ -135,7 +130,10 @@ class Board(object):
 
         routes = []
 
-        for tile in word.tile_list:
+        tiles = word.to_tiles()
+        num_tiles = len(tiles)
+
+        for tile in tiles:
             positions = self._occurences(tile)
             new_routes = []
 
@@ -145,7 +143,7 @@ class Board(object):
                     if position.touching(last_position) and position not in route:
                         new_route = route[:]
                         new_route.append(position)
-                        includes_whole_word = len(new_route) == word.num_tiles
+                        includes_whole_word = len(new_route) == num_tiles
                         if includes_whole_word:
                             return True
                         new_routes.append(new_route)
