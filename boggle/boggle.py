@@ -1,152 +1,212 @@
-class Tile(object):
+# TODO support multiple languages, with different valid words sections
+# TODO generate api docs, py:func etc
+# TODO change from word_list to word file
+# TODO create a UI
+# TODO create a "fromString" thing, then you can have a CLI shared with other
+# languages
+# TODO Also include a generator, to make random games
+# TODO handle case where a key in the board is not valid
+# TODO main docstring with my name, description of the project etc.
+# TODO try hypothesis for making a word - can it be broken?
+# TODO rename word_list as dictionary
+
+import io
+
+
+class Position(object):
+    """
+    The position of a tile on a Boggle board.
+    """
 
     def __init__(self, column, row):
+        """
+        :param int column: Column of the tile.
+        :param int row: Row of the tile.
+        """
         self.column = column
         self.row = row
 
+    def __hash__(self):
+        return id(self)
+
     def __eq__(self, other):
+        """
+        Return whether two positions are equal.
+        Positions are equal iff they have the same row and column.
+
+        :param Position other: A position to check for equality with self.
+        """
         return self.row == other.row and self.column == other.column
 
     def touching(self, other):
         """
-        Given another, check whether it is touching this tile.
+        Return whether two positions are touching.
 
-        second: A Tile.
+        :param Position other: A position to check for equality with self.
 
-        return: Bool, true iff the tiles are touching - immediately above,
-            below or diagonal.
+        :return bool: True iff the tiles are touching - immediately above,
+        below or diagonal.
         """
         return(
             abs(self.row - other.row) <= 1 and
             abs(self.column - other.column) <= 1)
 
 
-def to_tiles(word):
+class Word(object):
     """
-    Return the list of tile contents necessary to form a word.
-
-    A list of the letters in a string, except 'QU' is a tile and Q is not.
-
-    word: A string.
-    return: List of strings.
+    A string which can be represented by a list of strings which are each valid
+    tiles.
     """
-    word = word.replace('QU', 'Q')
-    tiles = []
-    for letter in word:
-        if letter == 'Q':
-            tiles.append('QU')
-        else:
-            tiles.append(letter)
-    return tiles
+
+    def __init__(self, string, valid_tiles):
+        """
+        :param str string: A word from a dictionary, valid if found on a Board.
+        :param set valid_tiles: Strings, all tile contents which are valid.
+        """
+        string = string.upper()
+
+        self._tiles = []
+        while len(string):
+            valid_tile_added = False
+            for tile in valid_tiles:
+                if string.startswith(tile.upper()):
+                    string = string[len(tile):]
+                    self._tiles.append(tile)
+                    valid_tile_added = True
+                    continue
+            if not valid_tile_added:
+                self._tiles = []
+                break
+
+    def get_tiles(self):
+        """
+        :return list: strings, each valid contents of a tile, joined makes the
+            word's string, or an empty list if the word cannot be created from
+            valid tiles.
+        """
+        return self._tiles
 
 
-def is_available_route(word, tile_map):
+class Board(object):
     """
-    Check if there is an available route to make a word in a board.
-
-    A route is a path of positions from first tile to next, to next... until
-    the last tile. It cannot include the same tile multiple times.
-
-    word: A string.
-    tile_map: Map of tiles to positions those tiles are in.
-
-    returns: Boolean, True iff there is a valid route.
+    Representation of a Boggle-like board. A board contains tiles at
+    co-ordinates with letters on them.
     """
-    routes = []
 
-    tiles = to_tiles(word)
-    word_length = len(tiles)
+    def __init__(self, rows):
+        """
+        :param list rows: Lists of tiles. Each tile is a string.
+        """
+        self._tile_map = {}
+        for row_index, row in enumerate(rows):
+            for column_index, tile in enumerate(row):
+                # TODO get the case matching piece here
+                position = Position(column=column_index, row=row_index)
+                if tile in self._tile_map:
+                    self._tile_map[tile].add(position)
+                else:
+                    self._tile_map[tile] = set([position])
 
-    for letter in to_tiles(word):
-        positions = tile_map[letter]
-        new_routes = []
+    def is_available_route(self, word):
+        """
+        Check if there is an available route to make a word in a board.
 
-        for route in routes:
-            last_position = route[len(route) - 1]
-            for position in positions:
-                if position.touching(last_position) and position not in route:
-                    new_route = route[:]
-                    new_route.append(position)
-                    includes_whole_word = len(new_route) == word_length
-                    if includes_whole_word:
-                        return True
-                    new_routes.append(new_route)
+        A route is a path of positions from first tile to next, to next...
+        until the last tile. It cannot include the same tile multiple times.
 
-        if not routes:
-            routes = routes or [[position] for position in positions]
-            continue
+        :param Word word: Word to look for in the board.
 
-        if not new_routes:
-            return False
+        :return bool: True iff there is a valid route.
+        """
+        routes = []
 
-        routes = new_routes
-
-
-def get_tile_map(board):
-    """
-    Get a mapping of tiles to positions.
-
-    board: A list of lists of tiles. Each list in the list of lists represents
-        a row of a Boggle board.
-
-    return: Dictionary, each key representing a tile content.
-    """
-    mapping = {}
-    for row_index, row in enumerate(board):
-        for column_index, piece in enumerate(row):
-            key = piece.upper()
-            tile = Tile(column=column_index, row=row_index)
-            try:
-                mapping[key].append(tile)
-            except KeyError:
-                mapping[key] = [tile]
-    return mapping
-
-
-def tiles_available(word, tile_map):
-    """
-    Check if there are enough of each required tile to make a word.
-
-    word: A string.
-    tile_map: A mapping of tiles available in a Boggle board to positions on
-        that board.
-
-    return: Boolean, True iff all tiles are available.
-    """
-    for tile in to_tiles(word):
-        try:
-            if word.count(tile) > len(tile_map[tile]):
+        for tile in word.get_tiles():
+            if tile not in self._tile_map:
                 return False
-        except KeyError:
-            return False
-    return True
+
+            positions = self._tile_map[tile]
+            new_routes = []
+
+            if not routes:
+                routes = [[position] for position in positions]
+                continue
+
+            for route in routes:
+                last_position = route[len(route) - 1]
+                for position in positions:
+                    if (position.touching(last_position) and
+                            position not in route):
+                        new_route = route[:]
+                        new_route.append(position)
+                        if len(new_route) == len(word.get_tiles()):
+                            return True
+                        new_routes.append(new_route)
+
+            routes = new_routes
+
+            if not routes:
+                return False
 
 
-def is_valid_word(word, tile_map):
+class Boggle(object):
     """
-    Return whether a word is valid and can be found on a board.
-
-    word: A string.
-    tile_map: A mapping of tiles available in a Boggle board to positions on
-        that board.
-
-    return: Boolean, True iff a word is valid.
+    A Boggle game.
     """
-    return (len(word) > 2 and
-            tiles_available(word=word, tile_map=tile_map) and
-            is_available_route(word=word, tile_map=tile_map))
+
+    valid_tiles = set([
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    ])
+
+    def __init__(self, board, valid_words):
+        """
+        :param Board board: The board to play the game on.
+        :param set valid_words: Words valid in the game.
+        """
+        self.board = board
+        self.valid_words = valid_words
+
+    def _matching_words(self):
+        """
+        :return set: :py:class:`Word`s which exist in the word list and can be
+            found.
+        """
+        found = set([])
+        for string in self.valid_words:
+            word = Word(string=string, valid_tiles=self.valid_tiles)
+            if len(string) > 2 and self.board.is_available_route(word=word):
+                found.add(word)
+        return found
+
+    def list_words(self):
+        """
+        :return set: Strings which are valid and can be found on the ``board``.
+        """
+        matching_words = self._matching_words()
+        return set(["".join(word.get_tiles()) for word in matching_words])
 
 
-def list_words(board, word_list):
+class Dictionary(object):
     """
-    Return all words from a given dictionary which are in a board.
-
-    word_list: A set of valid words.
-    board: A list of lists of tiles. Each list in the list of lists represents
-        a row of a Boggle board.
-
-    returns: A set of strings.
+    Valid words for a Boggle game.
     """
-    tile_map = get_tile_map(board)
-    word_list = set([word.upper() for word in word_list])
-    return set([word for word in word_list if is_valid_word(word, tile_map)])
+
+    def __init__(self, path="/usr/share/dict/words"):
+        """
+        :param string path: Path to a list of words valid in a game.
+        """
+        with io.open(path, encoding='latin-1') as word_file:
+            self._words = set(word.strip() for word in word_file)
+
+    def get_words(self):
+        """
+        :return set: All words in the dictionary file.
+        """
+        return self._words
+
+
+def list_words(board, dictionary_path=None):
+    board = Board(rows=board)
+    dictionary = Dictionary()
+    boggle = Boggle(board=board, valid_words=dictionary.get_words())
+    return boggle.list_words()
