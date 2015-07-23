@@ -70,7 +70,7 @@ class Word(object):
             valid_tile_added = False
             for tile in valid_tiles:
                 if string.startswith(tile.get_upper()):
-                    string = string[len(tile.get_tile()):]
+                    string = string[tile.length:]
                     self._tiles.append(tile.get_tile())
                     valid_tile_added = True
                     continue
@@ -156,6 +156,7 @@ class Tile(object):
     def __init__(self, tile):
         self._tile = tile
         self._upper = tile.upper()
+        self.length = len(tile)
     def get_tile(self):
         return self._tile
     def get_upper(self):
