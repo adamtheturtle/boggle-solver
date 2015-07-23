@@ -21,7 +21,7 @@ class GetWordsTests(unittest.TestCase):
         """
         file, path = mkstemp()
         with io.open(path, mode='w') as file:
-            file.write(dedent("""\
+            file.write(dedent(u"""\
             ABC
              DEF
             GHI  """))
