@@ -135,7 +135,7 @@ class Board(object):
 
             routes = new_routes
 
-            if not new_routes:
+            if not routes:
                 return False
 
 
