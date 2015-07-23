@@ -124,6 +124,10 @@ class Board(object):
             positions = self.tile_map[tile]
             new_routes = []
 
+            if not routes:
+                routes = [[position] for position in positions]
+                continue
+
             for route in routes:
                 last_position = route[len(route) - 1]
                 for position in positions:
@@ -134,10 +138,6 @@ class Board(object):
                         if includes_whole_word:
                             return True
                         new_routes.append(new_route)
-
-            if not routes:
-                routes = [[position] for position in positions]
-                continue
 
             routes = new_routes
 
