@@ -7,26 +7,27 @@ import unittest
 from boggle.boggle import Word
 
 
-class WordTests(unittest.TestCase):
+class GetTilesTests(unittest.TestCase):
     """
-    Tests for :class:`Word`
+    Tests for :py:func:`Word.get_tiles`
     """
     def test_word_from_tiles(self):
         """
-        Word.tiles is a list of valid tiles which make up a string.
+        :py:func:`Word.get_tiles` returns a list of valid tiles which make up
+            a string.
         """
         self.assertEqual(
-            Word(string='ABC', valid_tiles=set(['C', 'AB'])).tiles,
+            Word(string='ABC', valid_tiles=set(['C', 'AB'])).get_tiles(),
             ['AB', 'C'],
         )
 
     def test_impossible_word(self):
         """
-        Word.tiles is an empty list if a the string cannot be made by the
-        component tiles.
+        :py:func:`Word.get_tiles` returns empty list if a the string cannot be
+            made by the component tiles.
         """
         self.assertEqual(
-            Word(string='ABCD', valid_tiles=set(['C', 'AB'])).tiles,
+            Word(string='ABCD', valid_tiles=set(['C', 'AB'])).get_tiles(),
             [],
         )
 
@@ -35,7 +36,7 @@ class WordTests(unittest.TestCase):
         A given string's case does not change the tile list.
         """
         self.assertEqual(
-            Word(string='abc', valid_tiles=set(['C', 'AB'])).tiles,
+            Word(string='abc', valid_tiles=set(['C', 'AB'])).get_tiles(),
             ['AB', 'C'],
         )
 
@@ -44,6 +45,6 @@ class WordTests(unittest.TestCase):
         An unmatching tile's case appears in the tile list.
         """
         self.assertEqual(
-            Word(string='ABC', valid_tiles=set(['C', 'Ab'])).tiles,
+            Word(string='ABC', valid_tiles=set(['C', 'Ab'])).get_tiles(),
             ['Ab', 'C'],
         )

@@ -1,5 +1,5 @@
 # TODO support multiple languages, with different valid words sections
-# TODO generate api docs
+# TODO generate api docs, py:func etc
 # TODO change from word_list to word file
 # TODO create a UI
 # TODO create a "fromString" thing, then you can have a CLI shared with other
@@ -22,6 +22,9 @@ class Position(object):
         """
         self.column = column
         self.row = row
+
+    def __hash__(self):
+        return id(self)
 
     def __eq__(self, other):
         """
@@ -56,23 +59,29 @@ class Word(object):
         """
         :param str string: A word from a dictionary, valid if found on a Board.
         :param set valid_tiles: Strings, all tile contents which are valid.
-
-        :ivar list tiles: strings, each valid contents of a tile.
         """
         string = string.upper()
 
-        self.tiles = []
+        self._tiles = []
         while len(string):
             valid_tile_added = False
             for tile in valid_tiles:
                 if string.startswith(tile.upper()):
                     string = string[len(tile):]
-                    self.tiles.append(tile)
+                    self._tiles.append(tile)
                     valid_tile_added = True
                     continue
             if not valid_tile_added:
-                self.tiles = []
+                self._tiles = []
                 break
+
+    def get_tiles(self):
+        """
+        :return list: strings, each valid contents of a tile, joined makes the
+            word's string, or an empty list if the word cannot be created from
+            valid tiles.
+        """
+        return self._tiles
 
 
 class Board(object):
@@ -108,7 +117,7 @@ class Board(object):
         """
         routes = []
 
-        for tile in word.tiles:
+        for tile in word.get_tiles():
             if tile not in self._tile_map:
                 return False
 
@@ -126,8 +135,7 @@ class Board(object):
                             position not in route):
                         new_route = route[:]
                         new_route.append(position)
-                        includes_whole_word = len(new_route) == len(word.tiles)
-                        if includes_whole_word:
+                        if len(new_route) == len(word.get_tiles()):
                             return True
                         new_routes.append(new_route)
 
@@ -172,7 +180,7 @@ class Boggle(object):
         :return set: Words which are valid and can be found on the ``board``.
         """
         matching_words = self._matching_words()
-        return set(["".join(word.tiles) for word in matching_words])
+        return set(["".join(word.get_tiles()) for word in matching_words])
 
 
 def list_words(board, word_list):
