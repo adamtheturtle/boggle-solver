@@ -8,7 +8,7 @@
 # TODO handle case where a key in the board is not valid
 # TODO main docstring with my name, description of the project etc.
 # TODO try hypothesis for making a word - can it be broken?
-
+# TODO rename word_list as dictionary
 
 class Position(object):
     """

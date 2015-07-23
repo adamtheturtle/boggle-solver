@@ -1,124 +1,71 @@
 """
-Tests for :class:`Board`
+Tests for :class:`Boggle`
 """
 
 import unittest
 
-from boggle.boggle import Board, Word, Boggle
+from boggle.boggle import Board, Boggle
 
-class IsValidWord(unittest.TestCase):
+
+class BoggleTests(unittest.TestCase):
     """
-    Tests for `is_valid_word`.
+    Tests for `Boggle`.
     """
 
-    def test_valid_word(self):
+    def test_default_valid_tiles(self):
         """
-        Words of at least three letters which have an available route are
-        valid.
+        The default valid tiles are the same as in the English version of
+        Boggle.
         """
-        self.assertTrue(
-            is_valid_word(
-                word='ABC',
-                tile_map=get_tile_map(
-                    board=[
-                        ['A', 'B', 'C'],
-                    ],
-                )
-            )
+        board = Board(rows=[
+            ['A', 'B', 'C'],
+        ])
+
+        self.assertEqual(
+            Boggle(board=board, word_list=[]).valid_tiles,
+            set([
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                'M', 'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                'Y', 'Z',
+            ]),
         )
-
-    def test_short_word(self):
-        """
-        Words shorter than 3 letters are not valid.
-        """
-        self.assertFalse(
-            is_valid_word(
-                word='AB',
-                tile_map=get_tile_map(
-                    board=[
-                        ['A', 'B'],
-                    ],
-                )
-            )
-        )
-
-    def test_no_route(self):
-        """
-        Words without an available route are not valid.
-        """
-        self.assertFalse(
-            is_valid_word(
-                word='ABC',
-                tile_map=get_tile_map(
-                    board=[
-                        ['A', 'C', 'B'],
-                    ],
-                )
-            )
-        )
-
-    def test_q_u_together(self):
-        """
-        Q and u are on the same tile, so a word consisting of two tiles but
-        three letters is valid.
-        """
-        self.assertTrue(
-            is_valid_word(
-                word='QUA',
-                tile_map=get_tile_map(
-                    board=[
-                        ['Qu', 'A'],
-                    ],
-                ),
-            ),
-        )
-
-
-class ListWordsTests(unittest.TestCase):
-    """
-    Tests for `list_words`.
-    """
 
     def test_list_words(self):
         """
-        A set of available words is returned.
+        A set of words with available routes is returned.
         """
+        board = Board(rows=[
+            ['A', 'B', 'C'],
+            ['D', 'E', 'F'],
+        ])
+        word_list = set(['ABC', 'DEF', 'GHI'])
         self.assertEqual(
+            Boggle(board=board, word_list=word_list).list_words(),
             set(['ABC', 'DEF']),
-            list_words(
-                word_list=set(['ABC', 'DEF', 'GHI']),
-                board=[
-                    ['A', 'B', 'C'],
-                    ['D', 'E', 'F'],
-                ],
-            )
         )
 
-    def test_case_insensitive(self):
+    def test_short_words_not_listed(self):
         """
-        A word is valid regardless of case.
+        Words shorter than 3 letters are not listed as valid results.
         """
+        board = Board(rows=[
+            ['A', 'B', 'C'],
+        ])
+        word_list = set(['AB'])
         self.assertEqual(
-            set(['ABC']),
-            list_words(
-                word_list=set(['abc']),
-                board=[
-                    ['A', 'B', 'C'],
-                ],
-            )
+            Boggle(board=board, word_list=word_list).list_words(),
+            set([]),
         )
 
-    def test_no_duplicates(self):
+    def test_no_route_not_listed(self):
         """
-        Words which, ignoring case, are duplicated in the word list, are only
-        returned once.
+        Words without an available route are not listed as valid results.
         """
+        board = Board(rows=[
+            ['A', 'B', 'C'],
+        ])
+        word_list = set(['ACB'])
         self.assertEqual(
-            set(['ABC']),
-            list_words(
-                word_list=set(['ABC', 'abc']),
-                board=[
-                    ['A', 'B', 'C'],
-                ],
-            )
+            Boggle(board=board, word_list=word_list).list_words(),
+            set([]),
         )
