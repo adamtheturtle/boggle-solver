@@ -158,20 +158,43 @@ class Board(object):
         return True
 
 
+class Game(object):
+    """
+    TODO
+    """
+
+    # TODO change from word_list to word file
+    def __init__(self, board, word_list):
+        """
+        TODO
+        """
+        self.board = board
+        self.word_list = word_list
+
+    def _matching_words(self):
+        """
+        Return all words from a given dictionary which are in a board.
+
+        word_list: A set of valid words.
+        board: A list of lists of tiles. Each list in the list of lists represents
+            a row of a Boggle board.
+
+        returns: A set of strings.
+        """
+        found = set([])
+        for word in self.word_list:
+            word = Word(word=word)
+            if word.long_enough and self.board.is_available_route(word=word):
+                found.add(word)
+        return found
+
+    def list_words(self):
+        matching_words = self._matching_words()
+        return set([word.word for word in matching_words])
+
+
+
 def list_words(board, word_list):
-    """
-    Return all words from a given dictionary which are in a board.
-
-    word_list: A set of valid words.
-    board: A list of lists of tiles. Each list in the list of lists represents
-        a row of a Boggle board.
-
-    returns: A set of strings.
-    """
     board = Board(rows=board)
-    found = set([])
-    for word in word_list:
-        word = Word(word=word)
-        if word.long_enough and board.is_available_route(word=word):
-            found.add(word.word)
-    return found
+    game = Game(board=board, word_list=word_list)
+    return game.list_words()
