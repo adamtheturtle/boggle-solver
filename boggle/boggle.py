@@ -82,6 +82,12 @@ class Board(object):
     """
 
     def __init__(self, rows):
+        """
+        :param list rows: Lists of tiles. Each tile is a string.
+
+        :ivar dict tile_map: Mapping of tile contents to a list of
+            ``Position``s they appear at.
+        """
         self.tile_map = self._get_tile_map(rows)
 
     def _get_tile_map(self, rows):
@@ -90,7 +96,7 @@ class Board(object):
 
         :param list rows: Lists of tiles. Each tile is a string.
 
-        return: Dictionary, each key representing a tile content.
+        :return dict: Mapping of tile contents to ``Position``s they appear at.
         """
         mapping = {}
         for row_index, row in enumerate(rows):
