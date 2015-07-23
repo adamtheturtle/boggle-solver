@@ -187,18 +187,21 @@ class Boggle(object):
 
 
 class Dictionary(object):
+    """
+    Valid words for a Boggle game.
+    """
 
-    def __init__(self, path=None):
+    def __init__(self, path="/usr/share/dict/words"):
         """
-        TODO
+        :param string path: Path to a list of words valid in a game.
         """
-        if path is None:
-            path = "/usr/share/dict/words"
-
         with io.open(path, encoding='latin-1') as word_file:
             self._words = set(word.strip() for word in word_file)
 
     def get_words(self):
+        """
+        :return set: All words in the dictionary file.
+        """
         return self._words
 
 
