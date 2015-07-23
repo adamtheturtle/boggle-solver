@@ -7,7 +7,7 @@
 # TODO Also include a generator, to make random games
 # TODO handle case where a key in the board is not valid
 # TODO main docstring with my name, description of the project etc.
-
+# TODO try hypothesis for making a word - can it be broken?
 
 class Position(object):
     """
@@ -69,7 +69,7 @@ class Word(object):
                     valid_tile_added = True
                     continue
             if not valid_tile_added:
-                self.tiles = []
+                self.tiles = None
                 break
 
 
@@ -131,6 +131,10 @@ class Board(object):
         routes = []
 
         tiles = word.tiles
+
+        if not tiles:
+            return False
+
         num_tiles = len(tiles)
 
         for tile in tiles:
