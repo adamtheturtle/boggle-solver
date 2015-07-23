@@ -51,14 +51,10 @@ class Word(object):
     tiles.
     """
 
-    valid_tiles = [
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'QU', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    ]
-
-    def __init__(self, string):
+    def __init__(self, string, valid_tiles):
         """
         :param str string: A word from a dictionary, valid if found on a Board.
+        :param set valid_tiles: Strings, all tile contents which are valid.
 
         :ivar list tiles: strings, each valid contents of a tile.
         """
@@ -66,7 +62,7 @@ class Word(object):
         self.tiles = []
         while len(string):
             valid_tile_added = False
-            for tile in self.valid_tiles:
+            for tile in valid_tiles:
                 if string.startswith(tile):
                     string = string[len(tile):]
                     self.tiles.append(tile)
@@ -182,6 +178,11 @@ class Boggle(object):
     A Boggle game.
     """
 
+    valid_tiles = set([
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'QU', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    ])
+
     def __init__(self, board, word_list):
         """
         :param Board board: The board to play the game on.
@@ -197,7 +198,7 @@ class Boggle(object):
         """
         found = set([])
         for string in self.word_list:
-            word = Word(string=string)
+            word = Word(string=string, valid_tiles=self.valid_tiles)
             if len(string) > 2 and self.board.is_available_route(word=word):
                 found.add(word)
         return found
