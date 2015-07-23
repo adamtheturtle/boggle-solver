@@ -1,5 +1,5 @@
 """
-Tests for solving a game of Boggle.
+Tests for :class:`Position`.
 """
 
 import unittest

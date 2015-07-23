@@ -59,30 +59,23 @@ class Word(object):
     def __init__(self, word):
         """
         :param str word: A word from a dictionary, valid if found on a Board.
-        """
-        self.word = word.upper()
 
-    def to_tiles(self):
+        :ivar list tiles: strings, each valid contents of a tile.
         """
-        Return the list of tile contents necessary to form a word.
-
-        A list of the letters in a string, except 'QU' is a tile and Q is not.
-
-        :return list: strings, each valid contents of a tile.
-        """
-        word = self.word
-        tiles = []
+        word = word.upper()
+        self.tiles = []
         while len(word):
             valid_tile_added = False
             for tile in self.valid_tiles:
                 if word.startswith(tile):
                     word = word[len(tile):]
-                    tiles.append(tile)
+                    self.tiles.append(tile)
                     valid_tile_added = True
                     continue
             if not valid_tile_added:
-                return []
-        return tiles
+                self.tiles = []
+                break
+
 
 
 class Board(object):
@@ -141,7 +134,7 @@ class Board(object):
 
         routes = []
 
-        tiles = word.to_tiles()
+        tiles = word.tiles
         num_tiles = len(tiles)
 
         for tile in tiles:
@@ -214,7 +207,7 @@ class Boggle(object):
         :return set: Words which are valid and can be found on the ``board``.
         """
         matching_words = self._matching_words()
-        return set([word.word for word in matching_words])
+        return set(["".join(word.tiles) for word in matching_words])
 
 
 def list_words(board, word_list):
