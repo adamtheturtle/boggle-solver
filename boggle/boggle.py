@@ -1,4 +1,4 @@
-class Tile(object):
+class Position(object):
 
     def __init__(self, column, row):
         """
@@ -9,7 +9,7 @@ class Tile(object):
 
     def __eq__(self, other):
         """
-        Tiles are equal iff they are in the same position.
+        Positions are equal iff they have the same row and column.
 
         # TODO doc other
         """
@@ -82,14 +82,14 @@ class Board(object):
             for column_index, piece in enumerate(row):
                 # TODO handle case where a key is not valid
                 key = piece.upper()
-                tile = Tile(column=column_index, row=row_index)
+                tile = Position(column=column_index, row=row_index)
                 try:
                     mapping[key].append(tile)
                 except KeyError:
                     mapping[key] = [tile]
         return mapping
 
-    def occurences(self, tile):
+    def _occurences(self, tile):
         """
         TODO
 
@@ -118,7 +118,7 @@ class Board(object):
             return False
 
         for tile in word.tile_list:
-            positions = self.occurences(tile)
+            positions = self._occurences(tile)
             new_routes = []
 
             for route in routes:
@@ -153,7 +153,7 @@ class Board(object):
         return: Boolean, True iff all tiles are available.
         """
         for tile in word.tile_list:
-            if word.num_occurences(tile) > len(self.occurences(tile)):
+            if word.num_occurences(tile) > len(self._occurences(tile)):
                 return False
         return True
 
