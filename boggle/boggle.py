@@ -1,4 +1,10 @@
+# TODO support multiple languages, with different valid words sections
 # TODO generate api docs
+# TODO change from word_list to word file
+# TODO create a UI
+# TODO create a "fromString" thing, then you can have a CLI shared with other
+# languages
+# TODO Also include a generator, to make random games
 
 class Position(object):
     """
@@ -74,9 +80,8 @@ class Word(object):
 
 
 class Board(object):
-
-    # TODO Also include a generator
-
+    """
+    """
     def __init__(self, rows):
         """docstring for __init__"""
         self.tile_map = self._get_tile_map(rows)
@@ -178,10 +183,6 @@ class Game(object):
     """
     TODO
     """
-
-    # TODO change from word_list to word file
-    # TODO create a UI
-    # TODO create a "fromString" thing
     def __init__(self, board, word_list):
         """
         TODO
