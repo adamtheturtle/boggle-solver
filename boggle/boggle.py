@@ -164,6 +164,8 @@ class Game(object):
     """
 
     # TODO change from word_list to word file
+    # TODO create a UI
+    # TODO create a "fromString" thing
     def __init__(self, board, word_list):
         """
         TODO
