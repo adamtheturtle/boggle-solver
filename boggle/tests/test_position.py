@@ -32,7 +32,7 @@ class PositionTests(unittest.TestCase):
 
     def test_not_touching(self):
         """
-        If tiles are not touching, positions_touching returns False.
+        If positions are not touching, False is returned.
         """
         tile = Position(column=1, row=1)
         self.assertFalse(tile.touching(Position(column=3, row=3)))
