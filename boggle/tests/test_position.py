@@ -7,7 +7,7 @@ import unittest
 from boggle.boggle import Position
 
 
-class PositionTests(unittest.TestCase):
+class TouchingTests(unittest.TestCase):
     """
     Tests for `Position.touching`.
     """
@@ -37,7 +37,37 @@ class PositionTests(unittest.TestCase):
         tile = Position(column=1, row=1)
         self.assertFalse(tile.touching(Position(column=3, row=3)))
 
-    # TODO test equality
+class EqualityTests(unittest.TestCase):
+    """
+    Tests for `Position.__eq__`
+    """
+
+    def test_same_row_same_column_equal(self):
+        """
+        Positions with the same row and column are equal.
+        """
+        self.assertEqual(
+            Position(column=0, row=0),
+            Position(column=0, row=0),
+        )
+
+    def test_different_column_not_equal(self):
+        """
+        Positions with the same row but a different column are not equal.
+        """
+        self.assertNotEqual(
+            Position(column=0, row=0),
+            Position(column=1, row=0),
+        )
+
+    def test_different_crow_not_equal(self):
+        """
+        Positions with the same column but a different row are not equal.
+        """
+        self.assertNotEqual(
+            Position(column=0, row=0),
+            Position(column=0, row=1),
+        )
 #
 # class IsValidWord(unittest.TestCase):
 #     """
