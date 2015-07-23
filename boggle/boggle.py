@@ -117,10 +117,7 @@ class Board(object):
         """
         routes = []
 
-        tiles = word.tiles
-        num_tiles = len(tiles)
-
-        for tile in tiles:
+        for tile in word.tiles:
             if tile not in self.tile_map:
                 return False
 
@@ -133,7 +130,7 @@ class Board(object):
                     if position.touching(last_position) and position not in route:
                         new_route = route[:]
                         new_route.append(position)
-                        includes_whole_word = len(new_route) == num_tiles
+                        includes_whole_word = len(new_route) == len(word.tiles)
                         if includes_whole_word:
                             return True
                         new_routes.append(new_route)
