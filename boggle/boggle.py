@@ -100,43 +100,43 @@ class Board(object):
 
         return set([])
 
-def is_available_route(word, board):
-    """
-    Check if there is an available route to make a word in a board.
+    def is_available_route(self, word):
+        """
+        Check if there is an available route to make a word in a board.
 
-    A route is a path of positions from first tile to next, to next... until
-    the last tile. It cannot include the same tile multiple times.
+        A route is a path of positions from first tile to next, to next... until
+        the last tile. It cannot include the same tile multiple times.
 
-    word: A string.
-    tile_map: Map of tiles to positions those tiles are in.
+        word: A string.
+        tile_map: Map of tiles to positions those tiles are in.
 
-    returns: Boolean, True iff there is a valid route.
-    """
-    routes = []
+        returns: Boolean, True iff there is a valid route.
+        """
+        routes = []
 
-    for tile in word.tile_list:
-        positions = board.occurences(tile)
-        new_routes = []
+        for tile in word.tile_list:
+            positions = self.occurences(tile)
+            new_routes = []
 
-        for route in routes:
-            last_position = route[len(route) - 1]
-            for position in positions:
-                if position.touching(last_position) and position not in route:
-                    new_route = route[:]
-                    new_route.append(position)
-                    includes_whole_word = len(new_route) == word.num_tiles
-                    if includes_whole_word:
-                        return True
-                    new_routes.append(new_route)
+            for route in routes:
+                last_position = route[len(route) - 1]
+                for position in positions:
+                    if position.touching(last_position) and position not in route:
+                        new_route = route[:]
+                        new_route.append(position)
+                        includes_whole_word = len(new_route) == word.num_tiles
+                        if includes_whole_word:
+                            return True
+                        new_routes.append(new_route)
 
-        if not routes:
-            routes = routes or [[position] for position in positions]
-            continue
+            if not routes:
+                routes = routes or [[position] for position in positions]
+                continue
 
-        if not new_routes:
-            return False
+            if not new_routes:
+                return False
 
-        routes = new_routes
+            routes = new_routes
 
 
 def tiles_available(word, board):
@@ -171,6 +171,6 @@ def list_words(board, word_list):
         word = Word(word=word)
         if (word.long_enough and
             tiles_available(word=word, board=board) and
-            is_available_route(word=word, board=board)):
+            board.is_available_route(word=word)):
             found.add(word.word)
     return found
