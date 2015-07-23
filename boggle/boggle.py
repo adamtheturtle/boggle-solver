@@ -56,19 +56,19 @@ class Word(object):
         'O', 'P', 'QU', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ]
 
-    def __init__(self, word):
+    def __init__(self, string):
         """
-        :param str word: A word from a dictionary, valid if found on a Board.
+        :param str string: A word from a dictionary, valid if found on a Board.
 
         :ivar list tiles: strings, each valid contents of a tile.
         """
-        word = word.upper()
+        string = string.upper()
         self.tiles = []
-        while len(word):
+        while len(string):
             valid_tile_added = False
             for tile in self.valid_tiles:
-                if word.startswith(tile):
-                    word = word[len(tile):]
+                if string.startswith(tile):
+                    string = string[len(tile):]
                     self.tiles.append(tile)
                     valid_tile_added = True
                     continue
@@ -196,9 +196,9 @@ class Boggle(object):
             found.
         """
         found = set([])
-        for item in self.word_list:
-            word = Word(word=item)
-            if len(item) > 2 and self.board.is_available_route(word=word):
+        for string in self.word_list:
+            word = Word(string=string)
+            if len(string) > 2 and self.board.is_available_route(word=word):
                 found.add(word)
         return found
 
