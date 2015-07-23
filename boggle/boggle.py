@@ -1,8 +1,9 @@
+# TODO generate api docs
+
 class Position(object):
     """
     The position of a tile on a Boggle board.
     """
-    # TODO generate api docs
     def __init__(self, column, row):
         """
         :param int column: Column of the tile.
@@ -13,20 +14,21 @@ class Position(object):
 
     def __eq__(self, other):
         """
+        Return whether two positions are equal.
         Positions are equal iff they have the same row and column.
 
-        # TODO doc other
+        :param Position other: A position to check for equality with self.
         """
         return self.row == other.row and self.column == other.column
 
     def touching(self, other):
         """
-        Given another, check whether it is touching this tile.
+        Return whether two positions are touching.
 
-        second: A Tile.
+        :param Position other: A position to check for equality with self.
 
-        return: Bool, true iff the tiles are touching - immediately above,
-            below or diagonal.
+        :return bool: True iff the tiles are touching - immediately above,
+        below or diagonal.
         """
         return(
             abs(self.row - other.row) <= 1 and
