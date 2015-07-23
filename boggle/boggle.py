@@ -177,7 +177,7 @@ class Boggle(object):
 
     def list_words(self):
         """
-        :return set: Words which are valid and can be found on the ``board``.
+        :return set: Strings which are valid and can be found on the ``board``.
         """
         matching_words = self._matching_words()
         return set(["".join(word.get_tiles()) for word in matching_words])
