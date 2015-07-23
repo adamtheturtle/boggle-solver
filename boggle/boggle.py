@@ -59,11 +59,12 @@ class Word(object):
         :ivar list tiles: strings, each valid contents of a tile.
         """
         string = string.upper()
+
         self.tiles = []
         while len(string):
             valid_tile_added = False
             for tile in valid_tiles:
-                if string.startswith(tile):
+                if string.startswith(tile.upper()):
                     string = string[len(tile):]
                     self.tiles.append(tile)
                     valid_tile_added = True
@@ -93,8 +94,8 @@ class Board(object):
         """
         mapping = {}
         for row_index, row in enumerate(rows):
-            for column_index, piece in enumerate(row):
-                tile = piece.upper()
+            for column_index, tile in enumerate(row):
+                # TODO get the case matching piece here
                 position = Position(column=column_index, row=row_index)
                 if tile in mapping:
                     mapping[tile].append(position)
@@ -162,7 +163,7 @@ class Boggle(object):
 
     valid_tiles = set([
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'QU', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ])
 
     def __init__(self, board, word_list):
