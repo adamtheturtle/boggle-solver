@@ -5,6 +5,8 @@
 # TODO create a "fromString" thing, then you can have a CLI shared with other
 # languages
 # TODO Also include a generator, to make random games
+# TODO handle case where a key in the board is not valid
+# TODO main docstring with my name, description of the project etc.
 
 
 class Position(object):
@@ -45,6 +47,8 @@ class Position(object):
 
 class Word(object):
     """
+    A string which can be represented by a list of strings which are each valid
+    tiles.
     """
 
     valid_tiles = [
@@ -53,7 +57,6 @@ class Word(object):
     ]
 
     def __init__(self, word):
-        """docstring for __init__"""
         self.word = word.upper()
 
     def to_tiles(self):
@@ -62,8 +65,7 @@ class Word(object):
 
         A list of the letters in a string, except 'QU' is a tile and Q is not.
 
-        word: A string.
-        return: List of strings.
+        :return list: strings, each valid contents of a tile.
         """
         word = self.word
         tiles = []
@@ -82,24 +84,24 @@ class Word(object):
 
 class Board(object):
     """
+    Representation of a Boggle-like board. A board contains tiles at
+    co-ordinates with letters on them.
     """
+
     def __init__(self, rows):
-        """docstring for __init__"""
         self.tile_map = self._get_tile_map(rows)
 
-    def _get_tile_map(self, board):
+    def _get_tile_map(self, rows):
         """
         Get a mapping of tiles to positions.
 
-        board: A list of lists of tiles. Each list in the list of lists represents
-            a row of a Boggle board.
+        :param list rows: Lists of tiles. Each tile is a string.
 
         return: Dictionary, each key representing a tile content.
         """
         mapping = {}
-        for row_index, row in enumerate(board):
+        for row_index, row in enumerate(rows):
             for column_index, piece in enumerate(row):
-                # TODO handle case where a key is not valid
                 tile = piece.upper()
                 position = Position(column=column_index, row=row_index)
                 if tile in mapping:
@@ -195,10 +197,11 @@ class Game(object):
         Return all words from a given dictionary which are in a board.
 
         word_list: A set of valid words.
-        board: A list of lists of tiles. Each list in the list of lists represents
-            a row of a Boggle board.
+        board: A list of lists of tiles. Each list in the list of lists
+            represents a row of a Boggle board.
 
-        returns: A set of strings.
+        :return set: :py:class:`Word`s which exist in the word list and can be
+            found.
         """
         found = set([])
         for item in self.word_list:
