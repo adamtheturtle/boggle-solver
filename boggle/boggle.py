@@ -9,6 +9,7 @@
 # TODO main docstring with my name, description of the project etc.
 # TODO try hypothesis for making a word - can it be broken?
 
+
 class Position(object):
     """
     The position of a tile on a Boggle board.
@@ -74,7 +75,6 @@ class Word(object):
                 break
 
 
-
 class Board(object):
     """
     Representation of a Boggle-like board. A board contains tiles at
@@ -107,13 +107,12 @@ class Board(object):
         """
         Check if there is an available route to make a word in a board.
 
-        A route is a path of positions from first tile to next, to next... until
-        the last tile. It cannot include the same tile multiple times.
+        A route is a path of positions from first tile to next, to next...
+        until the last tile. It cannot include the same tile multiple times.
 
-        word: A string.
-        tile_map: Map of tiles to positions those tiles are in.
+        :param Word word: Word to look for in the board.
 
-        returns: Boolean, True iff there is a valid route.
+        :return bool: True iff there is a valid route.
         """
         routes = []
 
@@ -131,7 +130,8 @@ class Board(object):
             for route in routes:
                 last_position = route[len(route) - 1]
                 for position in positions:
-                    if position.touching(last_position) and position not in route:
+                    if (position.touching(last_position) and
+                            position not in route):
                         new_route = route[:]
                         new_route.append(position)
                         includes_whole_word = len(new_route) == len(word.tiles)
