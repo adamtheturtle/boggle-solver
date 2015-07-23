@@ -69,9 +69,9 @@ class Word(object):
         while len(string):
             valid_tile_added = False
             for tile in valid_tiles:
-                if string.startswith(tile.upper()):
-                    string = string[len(tile):]
-                    self._tiles.append(tile)
+                if string.startswith(tile.get_upper()):
+                    string = string[len(tile.get_tile()):]
+                    self._tiles.append(tile.get_tile())
                     valid_tile_added = True
                     continue
             if not valid_tile_added:
@@ -148,15 +148,30 @@ class Board(object):
                 return False
 
 
+class Tile(object):
+    """
+    TODO
+    """
+
+    def __init__(self, tile):
+        self._tile = tile
+        self._upper = tile.upper()
+    def get_tile(self):
+        return self._tile
+    def get_upper(self):
+        return self._upper
+
 class Boggle(object):
     """
     A Boggle game.
     """
 
-    valid_tiles = set([
+    tile_contents = set([
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ])
+
+    valid_tiles = set(Tile(tile=content) for content in tile_contents)
 
     def __init__(self, board, valid_words):
         """
