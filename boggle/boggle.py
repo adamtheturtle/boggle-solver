@@ -39,6 +39,11 @@ class Word(object):
     """
     """
 
+    valid_tiles = [
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'QU', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    ]
+
     def __init__(self, word):
         """docstring for __init__"""
         self.word = word.upper()
@@ -55,16 +60,11 @@ class Word(object):
         word: A string.
         return: List of strings.
         """
-        valid_tiles = [
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'QU', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        ]
-
         word = self.word
         tiles = []
         while len(word):
             valid_tile_added = False
-            for tile in valid_tiles:
+            for tile in self.valid_tiles:
                 if word.startswith(tile):
                     word = word[len(tile):]
                     tiles.append(tile)
