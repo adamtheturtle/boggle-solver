@@ -37,6 +37,7 @@ class TouchingTests(unittest.TestCase):
         tile = Position(column=1, row=1)
         self.assertFalse(tile.touching(Position(column=3, row=3)))
 
+
 class EqualityTests(unittest.TestCase):
     """
     Tests for `Position.__eq__`
