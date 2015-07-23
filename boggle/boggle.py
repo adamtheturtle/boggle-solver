@@ -133,10 +133,11 @@ class Board(object):
                 routes = routes or [[position] for position in positions]
                 continue
 
+            routes = new_routes
+
             if not new_routes:
                 return False
 
-            routes = new_routes
 
 
 def tiles_available(word, board):
