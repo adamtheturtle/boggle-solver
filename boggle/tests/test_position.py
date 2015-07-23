@@ -330,18 +330,3 @@ class EqualityTests(unittest.TestCase):
 #                 ],
 #             )
 #         )
-#
-#
-# class ToTilesTests(unittest.TestCase):
-#     """
-#     Tests for `to_tiles`.
-#     """
-#
-#     def test_to_tiles(self):
-#         """
-#         A list of letters is returned, except "QU" is a tile.
-#         """
-#         self.assertEqual(
-#             to_tiles("ABQUC"),
-#             ["A", "B", "QU", "C"],
-#         )

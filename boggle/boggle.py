@@ -103,17 +103,6 @@ class Board(object):
                     mapping[tile] = [position]
         return mapping
 
-    def _occurences(self, tile):
-        """
-        TODO
-
-        returns set of tiles
-        """
-        if tile in self.tile_map:
-            return self.tile_map[tile]
-
-        return set([])
-
     def is_available_route(self, word):
         """
         Check if there is an available route to make a word in a board.
@@ -132,7 +121,10 @@ class Board(object):
         num_tiles = len(tiles)
 
         for tile in tiles:
-            positions = self._occurences(tile)
+            if tile not in self.tile_map:
+                return False
+
+            positions = self.tile_map[tile]
             new_routes = []
 
             for route in routes:
