@@ -57,6 +57,9 @@ class Word(object):
     ]
 
     def __init__(self, word):
+        """
+        :param str word: A word from a dictionary, valid if found on a Board.
+        """
         self.word = word.upper()
 
     def to_tiles(self):
@@ -181,25 +184,21 @@ class Board(object):
         return True
 
 
-class Game(object):
+class Boggle(object):
     """
-    TODO
+    A Boggle game.
     """
+
     def __init__(self, board, word_list):
         """
-        TODO
+        :param Board board: The board to play the game on.
+        :param list word_list: A list of words valid in the game.
         """
         self.board = board
         self.word_list = word_list
 
     def _matching_words(self):
         """
-        Return all words from a given dictionary which are in a board.
-
-        word_list: A set of valid words.
-        board: A list of lists of tiles. Each list in the list of lists
-            represents a row of a Boggle board.
-
         :return set: :py:class:`Word`s which exist in the word list and can be
             found.
         """
@@ -211,11 +210,14 @@ class Game(object):
         return found
 
     def list_words(self):
+        """
+        :return set: Words which are valid and can be found on the ``board``.
+        """
         matching_words = self._matching_words()
         return set([word.word for word in matching_words])
 
 
 def list_words(board, word_list):
     board = Board(rows=board)
-    game = Game(board=board, word_list=word_list)
-    return game.list_words()
+    boggle = Boggle(board=board, word_list=word_list)
+    return boggle.list_words()
