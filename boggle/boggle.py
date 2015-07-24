@@ -132,14 +132,16 @@ class Board(object):
                 continue
 
             for route in routes:
-                last_position = route[len(route) - 1]
+                route_length = len(route)
+                last_position = route[route_length - 1]
                 for position in positions:
                     if (position.touching(last_position) and
                             position not in route):
+
+                        if route_length + 1 == len(word.get_tiles()):
+                            return True
                         new_route = route[:]
                         new_route.append(position)
-                        if len(new_route) == len(word.get_tiles()):
-                            return True
                         new_routes.append(new_route)
 
             routes = new_routes
