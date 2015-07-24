@@ -69,7 +69,7 @@ class Word(object):
         while len(string):
             valid_tile_added = False
             for tile in valid_tiles:
-                if string.startswith(tile.get_upper()):
+                if string[:tile.length] == tile.get_upper():
                     string = string[tile.length:]
                     self._tiles.append(tile.get_tile())
                     valid_tile_added = True
