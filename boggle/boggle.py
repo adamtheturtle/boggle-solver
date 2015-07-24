@@ -119,8 +119,9 @@ class Board(object):
         :return bool: True iff there is a valid route.
         """
         routes = []
+        num_tiles = len(word.get_tiles())
 
-        for tile in word.get_tiles():
+        for index, tile in enumerate(word.get_tiles()):
             if tile not in self._tile_map:
                 return False
 
@@ -132,13 +133,13 @@ class Board(object):
                 continue
 
             for route in routes:
-                last_position = route[len(route) - 1]
+                last_position = route[index - 1]
                 for position in positions:
                     if (position.touching(last_position) and
                             position not in route):
                         new_route = route[:]
                         new_route.append(position)
-                        if len(new_route) == len(word.get_tiles()):
+                        if index + 1 == num_tiles:
                             return True
                         new_routes.append(new_route)
 
