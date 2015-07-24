@@ -63,12 +63,15 @@ class Word(object):
         string = string.upper()
 
         self._tiles = []
-        while len(string):
+        string_length = len(string)
+        start = 0
+        while start < string_length:
             valid_tile_added = False
             for tile in valid_tiles:
-                if string[:tile.length] == tile.get_upper():
-                    string = string[tile.length:]
-                    self._tiles.append(tile.get_tile())
+                tile_length = len(tile)
+                if string[start:start + tile_length] == tile.upper():
+                    start += tile_length
+                    self._tiles.append(tile)
                     valid_tile_added = True
                     continue
             if not valid_tile_added:
@@ -116,9 +119,8 @@ class Board(object):
         :return bool: True iff there is a valid route.
         """
         routes = []
-        num_tiles = len(word.get_tiles())
 
-        for index, tile in enumerate(word.get_tiles()):
+        for tile in word.get_tiles():
             if tile not in self._tile_map:
                 return False
 
@@ -130,13 +132,13 @@ class Board(object):
                 continue
 
             for route in routes:
-                last_position = route[index - 1]
+                last_position = route[len(route) - 1]
                 for position in positions:
                     if (position.touching(last_position) and
                             position not in route):
                         new_route = route[:]
                         new_route.append(position)
-                        if index + 1 == num_tiles:
+                        if len(new_route) == len(word.get_tiles()):
                             return True
                         new_routes.append(new_route)
 
@@ -146,31 +148,15 @@ class Board(object):
                 return False
 
 
-class Tile(object):
-    """
-    TODO
-    """
-
-    def __init__(self, tile):
-        self._tile = tile
-        self._upper = tile.upper()
-        self.length = len(tile)
-    def get_tile(self):
-        return self._tile
-    def get_upper(self):
-        return self._upper
-
 class Boggle(object):
     """
     A Boggle game.
     """
 
-    tile_contents = set([
+    valid_tiles = set([
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ])
-
-    valid_tiles = set(Tile(tile=content) for content in tile_contents)
 
     def __init__(self, board, valid_words):
         """
