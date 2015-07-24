@@ -1,14 +1,11 @@
 # TODO support multiple languages, with different valid words sections
 # TODO generate api docs, py:func etc
-# TODO change from word_list to word file
 # TODO create a UI
 # TODO create a "fromString" thing, then you can have a CLI shared with other
 # languages
 # TODO Also include a generator, to make random games
 # TODO handle case where a key in the board is not valid
 # TODO main docstring with my name, description of the project etc.
-# TODO try hypothesis for making a word - can it be broken?
-# TODO rename word_list as dictionary
 
 import io
 
