@@ -1,14 +1,11 @@
 # TODO support multiple languages, with different valid words sections
 # TODO generate api docs, py:func etc
-# TODO change from word_list to word file
 # TODO create a UI
 # TODO create a "fromString" thing, then you can have a CLI shared with other
 # languages
 # TODO Also include a generator, to make random games
 # TODO handle case where a key in the board is not valid
 # TODO main docstring with my name, description of the project etc.
-# TODO try hypothesis for making a word - can it be broken?
-# TODO rename word_list as dictionary
 
 import io
 
@@ -66,11 +63,14 @@ class Word(object):
         string = string.upper()
 
         self._tiles = []
-        while len(string):
+        string_length = len(string)
+        start = 0
+        while start < string_length:
             valid_tile_added = False
             for tile in valid_tiles:
-                if string.startswith(tile.upper()):
-                    string = string[len(tile):]
+                tile_length = len(tile)
+                if string[start:start + tile_length] == tile.upper():
+                    start += tile_length
                     self._tiles.append(tile)
                     valid_tile_added = True
                     continue
@@ -132,14 +132,16 @@ class Board(object):
                 continue
 
             for route in routes:
-                last_position = route[len(route) - 1]
+                route_length = len(route)
+                last_position = route[route_length - 1]
                 for position in positions:
                     if (position.touching(last_position) and
                             position not in route):
+
+                        if route_length + 1 == len(word.get_tiles()):
+                            return True
                         new_route = route[:]
                         new_route.append(position)
-                        if len(new_route) == len(word.get_tiles()):
-                            return True
                         new_routes.append(new_route)
 
             routes = new_routes
