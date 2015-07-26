@@ -32,6 +32,8 @@ class Position(object):
         Positions are equal iff they have the same row and column.
 
         :param Position other: A position to check for equality with self.
+        :return: Whether two positions are equal.
+        :rtype: bool
         """
         return self.row == other.row and self.column == other.column
 
@@ -41,8 +43,9 @@ class Position(object):
 
         :param Position other: A position to check for equality with self.
 
-        :return bool: True iff the tiles are touching - immediately above,
+        :return: True iff the tiles are touching - immediately above,
             below or diagonal.
+        :rtype: bool
         """
         return(
             abs(self.row - other.row) <= 1 and
@@ -80,9 +83,10 @@ class Word(object):
 
     def get_tiles(self):
         """
-        :return list: strings, each valid contents of a tile, joined makes the
-            word's string, or an empty list if the word cannot be created from
-            valid tiles.
+        :return: Valid contents of tiles which when joined make the word's
+            string, or an empty list if the word cannot be created from valid
+            tiles.
+        :rtype: list of str
         """
         return self._tiles
 
@@ -195,14 +199,15 @@ class Dictionary(object):
 
     def __init__(self, path="/usr/share/dict/words"):
         """
-        :param string path: Path to a list of words valid in a game.
+        :param str path: Path to a list of words valid in a game.
         """
         with io.open(path, encoding='latin-1') as word_file:
             self._words = set(word.strip() for word in word_file)
 
     def get_words(self):
         """
-        :return set: All words in the dictionary file.
+        :return: All words in the dictionary file.
+        :rtype: ``set`` of :py:class:`Word`\s.
         """
         return self._words
 
