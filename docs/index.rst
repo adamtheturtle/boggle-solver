@@ -15,6 +15,7 @@ Contents:
     :toctree: generated
 
     boggle
+    boggle.boggle
 
 Indices and tables
 ==================
