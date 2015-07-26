@@ -11,7 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+.. autosummary::
+    :toctree: generated
 
+    boggle
 
 Indices and tables
 ==================
