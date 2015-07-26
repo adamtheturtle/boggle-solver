@@ -42,7 +42,7 @@ class Position(object):
         :param Position other: A position to check for equality with self.
 
         :return bool: True iff the tiles are touching - immediately above,
-        below or diagonal.
+            below or diagonal.
         """
         return(
             abs(self.row - other.row) <= 1 and
