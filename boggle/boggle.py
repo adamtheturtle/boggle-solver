@@ -184,18 +184,19 @@ class Boggle(object):
         """
         import pickle
         import os
+        import json
 
         if os.path.exists("mything.pickle"):
             with io.open('mything.pickle', 'rb') as input_file:
                 print('loading')
-                words = pickle.load(input_file)
+                words = json.load(input_file)
         else:
             with io.open('mything.pickle', 'wb') as output_file:
                 words = [
                     self.string_to_tiles(string=string,
                                          valid_tiles=self.valid_tiles)
                     for string in self.valid_words if len(string) > 2]
-                pickle.dump(words, output_file)
+                json.dump(words, output_file)
 
         return [word for word in words if
                 self.board.is_available_route(word=word)]
