@@ -182,10 +182,23 @@ class Boggle(object):
         :return set: :py:class:`Word`s which exist in the word list and can be
             found.
         """
+        import pickle
+        import os
 
-        words = [self.string_to_tiles(string=string, valid_tiles=self.valid_tiles) for string in self.valid_words if len(string) > 2]
+        if os.path.exists("mything.pickle"):
+            with io.open('mything.pickle', 'rb') as input_file:
+                print('loading')
+                words = pickle.load(input_file)
+        else:
+            with io.open('mything.pickle', 'wb') as output_file:
+                words = [
+                    self.string_to_tiles(string=string,
+                                         valid_tiles=self.valid_tiles)
+                    for string in self.valid_words if len(string) > 2]
+                pickle.dump(words, output_file)
 
-        return [word for word in words if self.board.is_available_route(word=word)]
+        return [word for word in words if
+                self.board.is_available_route(word=word)]
 
     def list_words(self):
         """
