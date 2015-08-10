@@ -161,12 +161,12 @@ class Boggle(object):
         :return set: :py:class:`Word`s which exist in the word list and can be
             found.
         """
-        word_set = set([])
+        words = set([])
         for string in self.valid_words:
-            word = Word(string=string, valid_tiles=self.valid_tiles)
-            word_set.add(word)
+            words.add(
+                Word(string=string, valid_tiles=self.valid_tiles))
 
-        return set([word for word in word_set if word.string_length > 2 and
+        return set([word for word in words if word.string_length > 2 and
                     self.board.is_available_route(word=word)])
 
     def list_words(self):
