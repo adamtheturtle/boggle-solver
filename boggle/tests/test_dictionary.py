@@ -12,10 +12,10 @@ from boggle.boggle import Dictionary
 
 class WordsTests(unittest.TestCase):
     """
-    Tests for `Dictionary.get_words`.
+    Tests for `Dictionary.words`.
     """
 
-    def test_get_words(self):
+    def test_words(self):
         """
         A list of words from a file with whitespace stripped is returned.
         """
