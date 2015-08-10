@@ -20,3 +20,9 @@ Run the tests locally using:
 ```
 python -m unittest discover
 ```
+
+# Plans
+
+* Some kind of interface. Maybe a GUI, maybe a CLI.
+* A generator to create random games.
+* Multiple language support.

@@ -1,12 +1,3 @@
-# TODO support multiple languages, with different valid words sections
-# TODO generate api docs, py:func etc
-# TODO create a UI
-# TODO create a "fromString" thing, then you can have a CLI shared with other
-# languages
-# TODO Also include a generator, to make random games
-# TODO handle case where a key in the board is not valid
-# TODO main docstring with my name, description of the project etc.
-
 import io
 
 
