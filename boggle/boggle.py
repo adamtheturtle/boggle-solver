@@ -185,11 +185,13 @@ class Boggle(object):
         import pickle
         import os
         import json
+        import time
 
         if os.path.exists("mything.pickle"):
+            now = time.time()
             with io.open('mything.pickle', 'rb') as input_file:
-                print('loading')
                 words = json.load(input_file)
+                print('Took {} seconds to load'.format(time.time() - now))
         else:
             with io.open('mything.pickle', 'wb') as output_file:
                 words = [
