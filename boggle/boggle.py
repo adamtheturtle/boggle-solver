@@ -1,4 +1,9 @@
 import io
+import pickle
+import os
+import json
+import time
+import marshal
 
 
 class Position(object):
@@ -40,41 +45,6 @@ class Position(object):
             abs(self.column - other.column) <= 1)
 
 
-class Word(object):
-    """
-    A string which can be represented by a list of strings which are each valid
-    tiles.
-    """
-
-    def __init__(self, string, valid_tiles):
-        """
-        :param str string: A word from a dictionary, valid if found on a Board.
-        :param set valid_tiles: Strings, all tile contents which are valid.
-
-        :ivar int string_length: The length of the ``string``.
-        :ivar list tiles: strings, each valid contents of a tile, joined makes
-            the word's string, or an empty list if the word cannot be created
-            from valid tiles.
-        """
-        string = string.upper()
-
-        self.tiles = []
-        string_length = len(string)
-        start = 0
-        while start < string_length:
-            valid_tile_added = False
-            for tile in valid_tiles:
-                tile_length = len(tile)
-                if string[start:start + tile_length] == tile.upper():
-                    start += tile_length
-                    self.tiles.append(tile)
-                    valid_tile_added = True
-                    continue
-            if not valid_tile_added:
-                self.tiles = []
-                break
-
-
 class Board(object):
     """
     Representation of a Boggle-like board. A board contains tiles at
@@ -108,6 +78,8 @@ class Board(object):
         """
         routes = []
 
+        word_length = len(word)
+
         for tile in word:
             if tile not in self._tile_map:
                 return False
@@ -126,7 +98,7 @@ class Board(object):
                     if (position.touching(last_position) and
                             position not in route):
 
-                        if route_length + 1 == len(word):
+                        if route_length + 1 == word_length:
                             return True
                         new_route = route[:]
                         new_route.append(position)
@@ -148,7 +120,7 @@ class Boggle(object):
         'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     ])
 
-    def __init__(self, board, valid_words):
+    def __init__(self, board, valid_words=None):
         """
         :param Board board: The board to play the game on.
         :param set valid_words: Words valid in the game.
@@ -177,16 +149,11 @@ class Boggle(object):
 
         return tiles
 
-    def _matching_words(self):
-        """
-        :return set: :py:class:`Word`s which exist in the word list and can be
-            found.
-        """
-        import pickle
-        import os
-        import json
-        import time
 
+    def list_words(self):
+        """
+        :return set: Strings which are valid and can be found on the ``board``.
+        """
         if os.path.exists("mything.pickle"):
             now = time.time()
             with io.open('mything.pickle', 'rb') as input_file:
@@ -200,15 +167,8 @@ class Boggle(object):
                     for string in self.valid_words if len(string) > 2]
                 json.dump(words, output_file)
 
-        return [word for word in words if
-                self.board.is_available_route(word=word)]
-
-    def list_words(self):
-        """
-        :return set: Strings which are valid and can be found on the ``board``.
-        """
-        matching_words = self._matching_words()
-        return set(["".join(word) for word in matching_words])
+        return set(["".join(word) for word in words if
+                self.board.is_available_route(word=word)])
 
 
 class Dictionary(object):
@@ -228,6 +188,6 @@ class Dictionary(object):
 
 def list_words(board, dictionary_path=None):
     board = Board(rows=board)
-    dictionary = Dictionary()
-    boggle = Boggle(board=board, valid_words=dictionary.words)
+    # dictionary = Dictionary()
+    boggle = Boggle(board=board)#, valid_words=dictionary.words)
     return boggle.list_words()
