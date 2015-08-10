@@ -59,9 +59,9 @@ class Word(object):
         string = string.upper()
 
         self.tiles = []
-        self.string_length = len(string)
+        string_length = len(string)
         start = 0
-        while start < self.string_length:
+        while start < string_length:
             valid_tile_added = False
             for tile in valid_tiles:
                 tile_length = len(tile)
@@ -108,7 +108,7 @@ class Board(object):
         """
         routes = []
 
-        for tile in word.tiles:
+        for tile in word:
             if tile not in self._tile_map:
                 return False
 
@@ -126,7 +126,7 @@ class Board(object):
                     if (position.touching(last_position) and
                             position not in route):
 
-                        if route_length + 1 == len(word.tiles):
+                        if route_length + 1 == len(word):
                             return True
                         new_route = route[:]
                         new_route.append(position)
@@ -156,24 +156,43 @@ class Boggle(object):
         self.board = board
         self.valid_words = valid_words
 
+    def string_to_tiles(self, string, valid_tiles):
+        string = string.upper()
+
+        tiles = []
+        string_length = len(string)
+        start = 0
+        while start < string_length:
+            valid_tile_added = False
+            for tile in valid_tiles:
+                tile_length = len(tile)
+                if string[start:start + tile_length] == tile.upper():
+                    start += tile_length
+                    tiles.append(tile)
+                    valid_tile_added = True
+                    continue
+            if not valid_tile_added:
+                tiles = []
+                break
+
+        return tiles
+
     def _matching_words(self):
         """
         :return set: :py:class:`Word`s which exist in the word list and can be
             found.
         """
 
-        words = set([Word(string=string, valid_tiles=self.valid_tiles) for
-                     string in self.valid_words])
+        words = [self.string_to_tiles(string=string, valid_tiles=self.valid_tiles) for string in self.valid_words if len(string) > 2]
 
-        return set([word for word in words if word.string_length > 2 and
-                    self.board.is_available_route(word=word)])
+        return [word for word in words if self.board.is_available_route(word=word)]
 
     def list_words(self):
         """
         :return set: Strings which are valid and can be found on the ``board``.
         """
         matching_words = self._matching_words()
-        return set(["".join(word.tiles) for word in matching_words])
+        return set(["".join(word) for word in matching_words])
 
 
 class Dictionary(object):
