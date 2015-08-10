@@ -10,7 +10,7 @@ import unittest
 from boggle.boggle import Dictionary
 
 
-class GetWordsTests(unittest.TestCase):
+class WordsTests(unittest.TestCase):
     """
     Tests for `Dictionary.get_words`.
     """
@@ -27,6 +27,6 @@ class GetWordsTests(unittest.TestCase):
             GHI  """))
 
         self.assertEqual(
-            Dictionary(path=path).get_words(),
+            Dictionary(path=path).words,
             set(["ABC", "DEF", "GHI"]),
         )
