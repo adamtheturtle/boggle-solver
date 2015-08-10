@@ -10,12 +10,12 @@ import unittest
 from boggle.boggle import Dictionary
 
 
-class GetWordsTests(unittest.TestCase):
+class WordsTests(unittest.TestCase):
     """
-    Tests for `Dictionary.get_words`.
+    Tests for `Dictionary.words`.
     """
 
-    def test_get_words(self):
+    def test_words(self):
         """
         A list of words from a file with whitespace stripped is returned.
         """
@@ -27,6 +27,6 @@ class GetWordsTests(unittest.TestCase):
             GHI  """))
 
         self.assertEqual(
-            Dictionary(path=path).get_words(),
+            Dictionary(path=path).words,
             set(["ABC", "DEF", "GHI"]),
         )
