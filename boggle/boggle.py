@@ -180,10 +180,3 @@ class Language(object):
 
         self.words = [Word(string=string, valid_tiles=tiles).tiles for
                       string in words if len(string) > 2]
-
-
-def list_words(board):
-    boggle = Boggle(
-        board=Board(rows=board),
-        valid_words=Language(dictionary_path="/usr/share/dict/words").words)
-    return boggle.list_words()

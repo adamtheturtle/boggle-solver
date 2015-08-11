@@ -4,7 +4,7 @@ import os
 import sys
 import profile
 
-from boggle.boggle import list_words
+from boggle.boggle import Boggle, Board, Language
 
 
 large_board = [
@@ -60,7 +60,12 @@ def main():
     ]
 
     for board in boards:
-        found_words = list_words(board=board['board'])
+        language = Language(dictionary_path="/usr/share/dict/words")
+        boggle = Boggle(
+            board=Board(rows=board['board']),
+            valid_words=language.words)
+
+        found_words = boggle.list_words()
 
         if not os.path.exists(board['file']):
             with io.open(board['file'], 'wb') as word_file:
