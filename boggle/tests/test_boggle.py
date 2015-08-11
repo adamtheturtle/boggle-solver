@@ -4,6 +4,8 @@ Tests for a Boggle solver.
 
 import unittest
 import io
+import os
+import json
 
 from tempfile import mkstemp
 from textwrap import dedent
@@ -44,6 +46,51 @@ class LanguageTests(unittest.TestCase):
         self.assertEqual(
             Language(dictionary_path=path).words,
             [],
+        )
+
+    def test_json_dumped(self):
+        """
+        If a data path is given, valid words are dumped there as JSON, in a
+        dict keyed by the dictionary path.
+        """
+        file, dictionary_path = mkstemp()
+        with io.open(dictionary_path, mode='w') as file:
+            file.write(u"ABC")
+
+        file, data_path = mkstemp()
+        os.remove(data_path)
+        Language(dictionary_path=dictionary_path, data_path=data_path)
+
+        expected = json.dumps(
+            {
+                dictionary_path: [['A', 'B', 'C']],
+            },
+        )
+
+        with io.open(data_path, mode='r') as file:
+            self.assertEqual(file.read(), expected)
+
+    def test_json_loaded(self):
+        """
+        If a data path is given, the loaded contents of the value of the JSON
+        dictionary which corresponds to the data path is loaded and set as the
+        valid words.
+        """
+        file, dictionary_path = mkstemp()
+        file, data_path = mkstemp()
+
+        with open(data_path, mode='w') as output_file:
+            json.dump(
+                {
+                    dictionary_path: [['A', 'B', 'C']],
+                },
+                output_file,
+            )
+
+        self.assertEqual(
+            Language(dictionary_path=dictionary_path,
+                     data_path=data_path).words,
+            [[u'A', u'B', u'C']],
         )
 
 
@@ -232,3 +279,39 @@ class PositionEqualityTests(unittest.TestCase):
             Position(column=0, row=0),
             Position(column=0, row=1),
         )
+
+
+class IntegrationTests(unittest.TestCase):
+    """
+    Integration tests.
+    """
+
+    def test_example_board(self):
+        """
+        Given a known board and language, expected words are found.
+        """
+        rows = [
+            ["Qu", "A", "A"],
+            ["A", "L", "G"],
+            ["R", "G", "I"],
+        ]
+
+        file, path = mkstemp()
+        with io.open(path, mode='w') as file:
+            file.write(dedent(u"""\
+            AQuA
+            Qua
+            ILA
+            GALGA
+            LA
+            ALA
+            CHRISTMAS
+            MOTHER
+            """))
+
+        language = Language(dictionary_path=path)
+        boggle = Boggle(
+            board=Board(rows=rows),
+            valid_words=language.words)
+        expected = set(['GALGA', 'ILA', 'AQuA', 'ALA', 'QuA'])
+        self.assertEqual(boggle.list_words(), expected)
