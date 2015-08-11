@@ -1,5 +1,3 @@
-
-import codecs
 import io
 import os
 import json
@@ -181,9 +179,8 @@ class Language(object):
         """
         data = {}
         if data_path is not None and os.path.exists(data_path):
-            with io.open(data_path, 'rb') as input_file:
-                reader = codecs.getreader("UTF-8")
-                data = json.load(reader(input_file))
+            with open(data_path, 'r') as input_file:
+                data = json.load(input_file)
                 if dictionary_path in data:
                     self.words = data[dictionary_path]
                     return
@@ -196,6 +193,5 @@ class Language(object):
 
         if data_path is not None:
             data[dictionary_path] = self.words
-            with io.open(data_path, 'wt') as output_file:
-                data = json.dumps(data)
-                output_file.write(codecs.decode(data.encode('UTF-8'), 'UTF-8'))
+            with open(data_path, 'w') as output_file:
+                json.dump(data, output_file)

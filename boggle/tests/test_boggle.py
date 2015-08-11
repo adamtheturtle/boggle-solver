@@ -3,7 +3,6 @@ Tests for a Boggle solver.
 """
 
 import unittest
-import codecs
 import io
 import os
 import json
@@ -80,14 +79,13 @@ class LanguageTests(unittest.TestCase):
         file, dictionary_path = mkstemp()
         file, data_path = mkstemp()
 
-        data = json.dumps(
-            {
-                dictionary_path: [['A', 'B', 'C']],
-            },
-        )
-
-        with io.open(data_path, mode='w') as output_file:
-            output_file.write(codecs.decode(data.encode('UTF-8'), 'UTF-8'))
+        with open(data_path, mode='w') as output_file:
+            json.dump(
+                {
+                    dictionary_path: [['A', 'B', 'C']],
+                },
+                output_file,
+            )
 
         self.assertEqual(
             Language(dictionary_path=dictionary_path,
