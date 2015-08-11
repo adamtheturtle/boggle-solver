@@ -67,7 +67,7 @@ class LanguageTests(unittest.TestCase):
             },
         )
 
-        with io.open(data_path, mode='r') as file:
+        with io.open(data_path, mode='rb') as file:
             self.assertEqual(file.read(), expected)
 
     def test_json_loaded(self):
@@ -85,8 +85,8 @@ class LanguageTests(unittest.TestCase):
             },
         )
 
-        with io.open(data_path, mode='w') as file:
-            file.write(unicode(data))
+        with io.open(data_path, mode='wb') as file:
+            file.write(data)
 
         self.assertEqual(
             Language(dictionary_path=dictionary_path,
