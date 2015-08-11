@@ -232,3 +232,36 @@ class PositionEqualityTests(unittest.TestCase):
             Position(column=0, row=0),
             Position(column=0, row=1),
         )
+
+
+class IntegrationTests(unittest.TestCase):
+    """
+    Integration tests.
+    """
+
+    def test_example_board(self):
+        rows = [
+            ["Qu", "A", "A"],
+            ["A", "L", "G"],
+            ["R", "G", "I"],
+        ]
+
+        file, path = mkstemp()
+        with io.open(path, mode='w') as file:
+            file.write(dedent(u"""\
+            AQuA
+            Qua
+            ILA
+            GALGA
+            LA
+            ALA
+            CHRISTMAS
+            MOTHER
+            """))
+
+        language = Language(dictionary_path=path)
+        boggle = Boggle(
+            board=Board(rows=rows),
+            valid_words=language.words)
+        expected = set(['GALGA', 'ILA', 'AQuA', 'ALA', 'QuA'])
+        self.assertEqual(boggle.list_words(), expected)
