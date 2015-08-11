@@ -60,7 +60,9 @@ def main():
     ]
 
     for board in boards:
-        language = Language(dictionary_path="/usr/share/dict/words")
+        language = Language(
+            dictionary_path="/usr/share/dict/words",
+            data_path="english_words.json")
         boggle = Boggle(
             board=Board(rows=board['board']),
             valid_words=language.words)
