@@ -79,6 +79,7 @@ class BoggleTests(unittest.TestCase):
             set([]),
         )
 
+
 class TilesTests(unittest.TestCase):
     """
     Tests for :py:func:`Word.tiles`
@@ -120,6 +121,7 @@ class TilesTests(unittest.TestCase):
             ['Ab', 'C'],
         )
 
+
 class IsAvailableRouteTests(unittest.TestCase):
     """
     Tests for `Board.is_available_route`.
@@ -155,6 +157,7 @@ class IsAvailableRouteTests(unittest.TestCase):
         ])
 
         self.assertFalse(board.is_available_route(word=['A', 'B', 'A']))
+
 
 class PositionTouchingTests(unittest.TestCase):
     """

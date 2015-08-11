@@ -87,7 +87,6 @@ class Board(object):
         self._tile_map = {}
         for row_index, row in enumerate(rows):
             for column_index, tile in enumerate(row):
-                # TODO get the case matching piece here
                 position = Position(column=column_index, row=row_index)
                 if tile in self._tile_map:
                     self._tile_map[tile].add(position)
@@ -152,7 +151,6 @@ class Boggle(object):
         self.board = board
         self.valid_words = valid_words
 
-
     def list_words(self):
         """
         :return set: Strings which are valid and can be found on the ``board``.
@@ -166,11 +164,11 @@ class Language(object):
     Valid words and tiles for a Boggle game.
     """
 
-    def __init__(self, path="/usr/share/dict/words"):
+    def __init__(self, path):
         """
         :param string path: Path to a list of words valid in a game.
 
-        :ivar set words: All words in the dictionary file.
+        :ivar lists words: All words in the dictionary file.
         """
         tiles = set([
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -181,8 +179,11 @@ class Language(object):
             words = set(word.strip() for word in word_file)
 
         self.words = [Word(string=string, valid_tiles=tiles).tiles for
-                 string in words if len(string) > 2]
+                      string in words if len(string) > 2]
 
 
 def list_words(board):
-    return Boggle(board=Board(rows=board), valid_words=Language().words).list_words()
+    boggle = Boggle(
+        board=Board(rows=board),
+        valid_words=Language(path="/usr/share/dict/words").words)
+    return boggle.list_words()
