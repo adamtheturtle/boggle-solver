@@ -164,7 +164,7 @@ class Language(object):
     Valid words and tiles for a Boggle game.
     """
 
-    def __init__(self, path):
+    def __init__(self, dictionary_path):
         """
         :param string path: Path to a list of words valid in a game.
 
@@ -175,7 +175,7 @@ class Language(object):
             'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
         ])
 
-        with io.open(path, encoding='latin-1') as word_file:
+        with io.open(dictionary_path, encoding='latin-1') as word_file:
             words = set(word.strip() for word in word_file)
 
         self.words = [Word(string=string, valid_tiles=tiles).tiles for
@@ -185,5 +185,5 @@ class Language(object):
 def list_words(board):
     boggle = Boggle(
         board=Board(rows=board),
-        valid_words=Language(path="/usr/share/dict/words").words)
+        valid_words=Language(dictionary_path="/usr/share/dict/words").words)
     return boggle.list_words()

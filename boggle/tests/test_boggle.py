@@ -29,7 +29,7 @@ class LanguageTests(unittest.TestCase):
             GHI  """))
 
         self.assertEqual(
-            sorted(Language(path=path).words),
+            sorted(Language(dictionary_path=path).words),
             sorted([['A', 'B', 'C'], ['G', 'H', 'I'], ['D', 'E', 'F']]),
         )
 
@@ -42,7 +42,7 @@ class LanguageTests(unittest.TestCase):
             file.write(u"AB")
 
         self.assertEqual(
-            Language(path=path).words,
+            Language(dictionary_path=path).words,
             [],
         )
 
