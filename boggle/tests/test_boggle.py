@@ -67,7 +67,7 @@ class LanguageTests(unittest.TestCase):
             },
         )
 
-        with io.open(data_path, mode='rb') as file:
+        with io.open(data_path, mode='r') as file:
             self.assertEqual(file.read(), expected)
 
     def test_json_loaded(self):

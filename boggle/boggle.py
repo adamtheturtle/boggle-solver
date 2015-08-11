@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+
+import codecs
 import io
 import os
 import json
@@ -176,12 +177,13 @@ class Language(object):
         """
         :param string path: Path to a list of words valid in a game.
 
-        :ivar lists words: All words in the dictionary file.
+        :ivar list words: All words in the dictionary file.
         """
         data = {}
         if data_path is not None and os.path.exists(data_path):
             with io.open(data_path, 'rb') as input_file:
-                data = json.load(input_file)
+                reader = codecs.getreader("UTF-8")
+                data = json.load(reader(input_file))
                 if dictionary_path in data:
                     self.words = data[dictionary_path]
                     return
