@@ -51,7 +51,6 @@ class Word(object):
         :param str string: A word from a dictionary, valid if found on a Board.
         :param set valid_tiles: Strings, all tile contents which are valid.
 
-        :ivar int string_length: The length of the ``string``.
         :ivar list tiles: strings, each valid contents of a tile, joined makes
             the word's string, or an empty list if the word cannot be created
             from valid tiles.
@@ -59,9 +58,9 @@ class Word(object):
         string = string.upper()
 
         self.tiles = []
-        self.string_length = len(string)
+        string_length = len(string)
         start = 0
-        while start < self.string_length:
+        while start < string_length:
             valid_tile_added = False
             for tile in valid_tiles:
                 tile_length = len(tile)
@@ -88,7 +87,6 @@ class Board(object):
         self._tile_map = {}
         for row_index, row in enumerate(rows):
             for column_index, tile in enumerate(row):
-                # TODO get the case matching piece here
                 position = Position(column=column_index, row=row_index)
                 if tile in self._tile_map:
                     self._tile_map[tile].add(position)
@@ -102,13 +100,15 @@ class Board(object):
         A route is a path of positions from first tile to next, to next...
         until the last tile. It cannot include the same tile multiple times.
 
-        :param Word word: Word to look for in the board.
+        :param list word: List of tiles to look for in the board.
 
         :return bool: True iff there is a valid route.
         """
         routes = []
 
-        for tile in word.tiles:
+        word_length = len(word)
+
+        for tile in word:
             if tile not in self._tile_map:
                 return False
 
@@ -126,7 +126,7 @@ class Board(object):
                     if (position.touching(last_position) and
                             position not in route):
 
-                        if route_length + 1 == len(word.tiles):
+                        if route_length + 1 == word_length:
                             return True
                         new_route = route[:]
                         new_route.append(position)
@@ -143,11 +143,6 @@ class Boggle(object):
     A Boggle game.
     """
 
-    valid_tiles = set([
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    ])
-
     def __init__(self, board, valid_words):
         """
         :param Board board: The board to play the game on.
@@ -156,43 +151,39 @@ class Boggle(object):
         self.board = board
         self.valid_words = valid_words
 
-    def _matching_words(self):
-        """
-        :return set: :py:class:`Word`s which exist in the word list and can be
-            found.
-        """
-
-        words = set([Word(string=string, valid_tiles=self.valid_tiles) for
-                     string in self.valid_words])
-
-        return set([word for word in words if word.string_length > 2 and
-                    self.board.is_available_route(word=word)])
-
     def list_words(self):
         """
         :return set: Strings which are valid and can be found on the ``board``.
         """
-        matching_words = self._matching_words()
-        return set(["".join(word.tiles) for word in matching_words])
+        return set(["".join(word) for word in self.valid_words if
+                    self.board.is_available_route(word=word)])
 
 
-class Dictionary(object):
+class Language(object):
     """
-    Valid words for a Boggle game.
+    Valid words and tiles for a Boggle game.
     """
 
-    def __init__(self, path="/usr/share/dict/words"):
+    def __init__(self, dictionary_path):
         """
         :param string path: Path to a list of words valid in a game.
 
-        :ivar set words: All words in the dictionary file.
+        :ivar lists words: All words in the dictionary file.
         """
-        with io.open(path, encoding='latin-1') as word_file:
-            self.words = set(word.strip() for word in word_file)
+        tiles = set([
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        ])
+
+        with io.open(dictionary_path, encoding='latin-1') as word_file:
+            words = set(word.strip() for word in word_file)
+
+        self.words = [Word(string=string, valid_tiles=tiles).tiles for
+                      string in words if len(string) > 2]
 
 
-def list_words(board, dictionary_path=None):
-    board = Board(rows=board)
-    dictionary = Dictionary()
-    boggle = Boggle(board=board, valid_words=dictionary.words)
+def list_words(board):
+    boggle = Boggle(
+        board=Board(rows=board),
+        valid_words=Language(dictionary_path="/usr/share/dict/words").words)
     return boggle.list_words()
