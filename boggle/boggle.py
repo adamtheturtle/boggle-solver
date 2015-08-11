@@ -1,4 +1,6 @@
 import io
+import os
+import json
 
 
 class Position(object):
@@ -170,6 +172,15 @@ class Language(object):
 
         :ivar lists words: All words in the dictionary file.
         """
+        data_file = 'valid_words.json'
+        data = {}
+        if os.path.exists(data_file):
+            with io.open(data_file, 'rb') as input_file:
+                data = json.load(input_file)
+                if dictionary_path in data:
+                    self.words = data[dictionary_path]
+                    return
+
         tiles = set([
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -180,3 +191,8 @@ class Language(object):
 
         self.words = [Word(string=string, valid_tiles=tiles).tiles for
                       string in words if len(string) > 2]
+
+        data[dictionary_path] = self.words
+
+        with io.open(data_file, 'wb') as input_file:
+            json.dump(data, input_file)
