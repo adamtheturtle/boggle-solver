@@ -101,13 +101,15 @@ class Board(object):
         A route is a path of positions from first tile to next, to next...
         until the last tile. It cannot include the same tile multiple times.
 
-        :param Word word: Word to look for in the board.
+        :param list word: List of tiles to look for in the board.
 
         :return bool: True iff there is a valid route.
         """
         routes = []
 
-        for tile in word.tiles:
+        word_length = len(word)
+
+        for tile in word:
             if tile not in self._tile_map:
                 return False
 
@@ -125,7 +127,7 @@ class Board(object):
                     if (position.touching(last_position) and
                             position not in route):
 
-                        if route_length + 1 == len(word.tiles):
+                        if route_length + 1 == word_length:
                             return True
                         new_route = route[:]
                         new_route.append(position)
@@ -157,22 +159,22 @@ class Boggle(object):
 
     def _matching_words(self):
         """
-        :return set: :py:class:`Word`s which exist in the word list and can be
+        :return set: Lists of strings which exist in the word list and can be
             found.
         """
 
-        words = set([Word(string=string, valid_tiles=self.valid_tiles) for
-                     string in self.valid_words if len(string) > 2])
+        words = [Word(string=string, valid_tiles=self.valid_tiles).tiles for
+                         string in self.valid_words if len(string) > 2]
 
-        return set([word for word in words if
-                    self.board.is_available_route(word=word)])
+        return [word for word in words if
+                    self.board.is_available_route(word=word)]
 
     def list_words(self):
         """
         :return set: Strings which are valid and can be found on the ``board``.
         """
         matching_words = self._matching_words()
-        return set(["".join(word.tiles) for word in matching_words])
+        return set(["".join(word) for word in matching_words])
 
 
 class Dictionary(object):

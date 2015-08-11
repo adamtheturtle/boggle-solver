@@ -4,7 +4,7 @@ Tests for :class:`Board`
 
 import unittest
 
-from boggle.boggle import Board, Word
+from boggle.boggle import Board
 
 
 class IsAvailableRouteTests(unittest.TestCase):
@@ -20,14 +20,7 @@ class IsAvailableRouteTests(unittest.TestCase):
             ['A', 'B', 'C'],
         ])
 
-        self.assertTrue(
-            board.is_available_route(
-                word=Word(
-                    string='ABC',
-                    valid_tiles=set(['A', 'B', 'C']),
-                ),
-            ),
-        )
+        self.assertTrue(board.is_available_route(word=['A', 'B', 'C']))
 
     def test_not_in_board(self):
         """
@@ -36,14 +29,8 @@ class IsAvailableRouteTests(unittest.TestCase):
         board = Board(rows=[
             ['A', 'C', 'B'],
         ])
-        self.assertFalse(
-            board.is_available_route(
-                word=Word(
-                    string='ABC',
-                    valid_tiles=set(['A', 'B', 'C']),
-                ),
-            ),
-        )
+
+        self.assertFalse(board.is_available_route(word=['A', 'B', 'C']))
 
     def test_repeated_tile(self):
         """
@@ -54,11 +41,4 @@ class IsAvailableRouteTests(unittest.TestCase):
             ['A', 'B'],
         ])
 
-        self.assertFalse(
-            board.is_available_route(
-                word=Word(
-                    string='ABA',
-                    valid_tiles=set(['A', 'B']),
-                ),
-            ),
-        )
+        self.assertFalse(board.is_available_route(word=['A', 'B', 'A']))
