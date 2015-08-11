@@ -144,11 +144,6 @@ class Boggle(object):
     A Boggle game.
     """
 
-    valid_tiles = set([
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-        'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    ])
-
     def __init__(self, board, valid_words):
         """
         :param Board board: The board to play the game on.
@@ -157,29 +152,18 @@ class Boggle(object):
         self.board = board
         self.valid_words = valid_words
 
-    def _matching_words(self):
-        """
-        :return set: Lists of strings which exist in the word list and can be
-            found.
-        """
-
-        words = [Word(string=string, valid_tiles=self.valid_tiles).tiles for
-                         string in self.valid_words if len(string) > 2]
-
-        return [word for word in words if
-                    self.board.is_available_route(word=word)]
 
     def list_words(self):
         """
         :return set: Strings which are valid and can be found on the ``board``.
         """
-        matching_words = self._matching_words()
-        return set(["".join(word) for word in matching_words])
+        return set(["".join(word) for word in self.valid_words if
+                    self.board.is_available_route(word=word)])
 
 
-class Dictionary(object):
+class Language(object):
     """
-    Valid words for a Boggle game.
+    Valid words and tiles for a Boggle game.
     """
 
     def __init__(self, path="/usr/share/dict/words"):
@@ -188,12 +172,17 @@ class Dictionary(object):
 
         :ivar set words: All words in the dictionary file.
         """
+        tiles = set([
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+            'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        ])
+
         with io.open(path, encoding='latin-1') as word_file:
-            self.words = set(word.strip() for word in word_file)
+            words = set(word.strip() for word in word_file)
+
+        self.words = [Word(string=string, valid_tiles=tiles).tiles for
+                 string in words if len(string) > 2]
 
 
-def list_words(board, dictionary_path=None):
-    board = Board(rows=board)
-    dictionary = Dictionary()
-    boggle = Boggle(board=board, valid_words=dictionary.words)
-    return boggle.list_words()
+def list_words(board):
+    return Boggle(board=Board(rows=board), valid_words=Language().words).list_words()
