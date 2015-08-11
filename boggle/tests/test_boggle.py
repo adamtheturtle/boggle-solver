@@ -3,6 +3,7 @@ Tests for a Boggle solver.
 """
 
 import unittest
+import codecs
 import io
 import os
 import json
@@ -85,8 +86,8 @@ class LanguageTests(unittest.TestCase):
             },
         )
 
-        with io.open(data_path, mode='wb') as file:
-            file.write(data)
+        with io.open(data_path, mode='w') as output_file:
+            output_file.write(codecs.decode(data.encode('UTF-8'), 'UTF-8'))
 
         self.assertEqual(
             Language(dictionary_path=dictionary_path,

@@ -196,5 +196,6 @@ class Language(object):
 
         if data_path is not None:
             data[dictionary_path] = self.words
-            with io.open(data_path, 'wb') as input_file:
-                json.dump(data, input_file)
+            with io.open(data_path, 'wt') as output_file:
+                data = json.dumps(data)
+                output_file.write(codecs.decode(data.encode('UTF-8'), 'UTF-8'))
