@@ -47,6 +47,19 @@ class LanguageTests(unittest.TestCase):
         )
 
 
+    def test_json_dumped(self):
+        """
+        If a data path is given, valid words are dumped there.
+        """
+        file, path = mkstemp()
+        with io.open(path, mode='w') as file:
+            file.write(u"AB")
+
+        self.assertEqual(
+            Language(dictionary_path=path).words,
+            [],
+        )
+
 class BoggleTests(unittest.TestCase):
     """
     Tests for `Boggle`.
@@ -240,6 +253,9 @@ class IntegrationTests(unittest.TestCase):
     """
 
     def test_example_board(self):
+        """
+        Given a known board and language, expected words are found.
+        """
         rows = [
             ["Qu", "A", "A"],
             ["A", "L", "G"],

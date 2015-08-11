@@ -166,33 +166,32 @@ class Language(object):
     Valid words and tiles for a Boggle game.
     """
 
-    def __init__(self, dictionary_path):
+    tiles = set([
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+        'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    ])
+
+    def __init__(self, dictionary_path, data_path=None):
         """
         :param string path: Path to a list of words valid in a game.
 
         :ivar lists words: All words in the dictionary file.
         """
-        data_file = 'valid_words.json'
         data = {}
-        if os.path.exists(data_file):
-            with io.open(data_file, 'rb') as input_file:
+        if data_path is not None and os.path.exists(data_path):
+            with io.open(data_path, 'rb') as input_file:
                 data = json.load(input_file)
                 if dictionary_path in data:
                     self.words = data[dictionary_path]
                     return
 
-        tiles = set([
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Qu', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        ])
-
         with io.open(dictionary_path, encoding='latin-1') as word_file:
             words = set(word.strip() for word in word_file)
 
-        self.words = [Word(string=string, valid_tiles=tiles).tiles for
+        self.words = [Word(string=string, valid_tiles=self.tiles).tiles for
                       string in words if len(string) > 2]
 
-        data[dictionary_path] = self.words
-
-        with io.open(data_file, 'wb') as input_file:
-            json.dump(data, input_file)
+        if data_path is not None:
+            data[dictionary_path] = self.words
+            with io.open(data_path, 'wb') as input_file:
+                json.dump(data, input_file)
