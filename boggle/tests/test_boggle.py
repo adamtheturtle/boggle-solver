@@ -70,6 +70,30 @@ class LanguageTests(unittest.TestCase):
         with io.open(data_path, mode='r') as file:
             self.assertEqual(file.read(), expected)
 
+    def test_json_loaded(self):
+        """
+        If a data path is given, the loaded contents of the value of the JSON
+        dictionary which corresponds to the data path is loaded and set as the
+        valid words.
+        """
+        file, dictionary_path = mkstemp()
+        file, data_path = mkstemp()
+
+        data = json.dumps(
+            {
+                dictionary_path: [['A', 'B', 'C']],
+            },
+        )
+
+        with io.open(data_path, mode='w') as file:
+            file.write(unicode(data))
+
+        self.assertEqual(
+            Language(dictionary_path=dictionary_path,
+                     data_path=data_path).words,
+            [[u'A', u'B', u'C']],
+        )
+
 
 class BoggleTests(unittest.TestCase):
     """
