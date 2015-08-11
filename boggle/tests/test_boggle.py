@@ -169,6 +169,7 @@ class IsAvailableRouteTests(unittest.TestCase):
 
         self.assertTrue(board.is_available_route(word=['A', 'A', 'A']))
 
+
 class PositionTouchingTests(unittest.TestCase):
     """
     Tests for `Position.touching`.
