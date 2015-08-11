@@ -29,8 +29,8 @@ class LanguageTests(unittest.TestCase):
             GHI  """))
 
         self.assertEqual(
-            Language(path=path).words,
-            [['A', 'B', 'C'], ['G', 'H', 'I'], ['D', 'E', 'F']],
+            sorted(Language(path=path).words),
+            sorted([['A', 'B', 'C'], ['G', 'H', 'I'], ['D', 'E', 'F']]),
         )
 
     def test_short_words_not_listed(self):
