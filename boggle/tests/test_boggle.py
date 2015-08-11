@@ -158,6 +158,16 @@ class IsAvailableRouteTests(unittest.TestCase):
 
         self.assertFalse(board.is_available_route(word=['A', 'B', 'A']))
 
+    def test_repeated_tile_contents(self):
+        """
+        A route which uses the different tiles is valid, even if the contents
+        of some of those tiles are the same.
+        """
+        board = Board(rows=[
+            ['A', 'A', 'A'],
+        ])
+
+        self.assertTrue(board.is_available_route(word=['A', 'A', 'A']))
 
 class PositionTouchingTests(unittest.TestCase):
     """
