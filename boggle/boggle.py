@@ -51,7 +51,6 @@ class Word(object):
         :param str string: A word from a dictionary, valid if found on a Board.
         :param set valid_tiles: Strings, all tile contents which are valid.
 
-        :ivar int string_length: The length of the ``string``.
         :ivar list tiles: strings, each valid contents of a tile, joined makes
             the word's string, or an empty list if the word cannot be created
             from valid tiles.
@@ -59,9 +58,9 @@ class Word(object):
         string = string.upper()
 
         self.tiles = []
-        self.string_length = len(string)
+        string_length = len(string)
         start = 0
-        while start < self.string_length:
+        while start < string_length:
             valid_tile_added = False
             for tile in valid_tiles:
                 tile_length = len(tile)
@@ -163,9 +162,9 @@ class Boggle(object):
         """
 
         words = set([Word(string=string, valid_tiles=self.valid_tiles) for
-                     string in self.valid_words])
+                     string in self.valid_words if len(string) > 2])
 
-        return set([word for word in words if word.string_length > 2 and
+        return set([word for word in words if
                     self.board.is_available_route(word=word)])
 
     def list_words(self):
