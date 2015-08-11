@@ -4,6 +4,8 @@ Tests for a Boggle solver.
 
 import unittest
 import io
+import os
+import json
 
 from tempfile import mkstemp
 from textwrap import dedent
@@ -46,19 +48,28 @@ class LanguageTests(unittest.TestCase):
             [],
         )
 
-
     def test_json_dumped(self):
         """
-        If a data path is given, valid words are dumped there.
+        If a data path is given, valid words are dumped there as JSON, in a
+        dict keyed by the dictionary path.
         """
-        file, path = mkstemp()
-        with io.open(path, mode='w') as file:
-            file.write(u"AB")
+        file, dictionary_path = mkstemp()
+        with io.open(dictionary_path, mode='w') as file:
+            file.write(u"ABC")
 
-        self.assertEqual(
-            Language(dictionary_path=path).words,
-            [],
+        file, data_path = mkstemp()
+        os.remove(data_path)
+        Language(dictionary_path=dictionary_path, data_path=data_path)
+
+        expected = json.dumps(
+            {
+                dictionary_path: [['A', 'B', 'C']],
+            },
         )
+
+        with io.open(data_path, mode='r') as file:
+            self.assertEqual(file.read(), expected)
+
 
 class BoggleTests(unittest.TestCase):
     """
